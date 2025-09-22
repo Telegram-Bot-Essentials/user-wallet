@@ -5,9 +5,9 @@ namespace TelegramBotEssentials\UserWallet;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
-use TelegramBotEssentials\Essence\Telegram\StateAnswers\Member\MyWalletAnswer;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQuery;
 use TelegramBotEssentials\UserWallet\Telegram\ReplyKeys\Member\MyWalletKey;
+use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member\MyWalletAnswer;
 
 class TbeUserWalletServiceProvider extends ServiceProvider
 {
