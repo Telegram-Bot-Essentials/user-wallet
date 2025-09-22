@@ -22,12 +22,9 @@ class TbeUserWalletServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $path = __DIR__ . '/../lang';
+        $this->registerPublishing();
+
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-wallet');
-        app()->booted(function () use ($path) {
-            logger()->error('Translations loaded from: ' . $path);
-            logger()->error(__('tbe-user-wallet::my_wallet.reply_key'));
-        });
 
         replyKeyBus()->addReplyKeys([
             MyWalletKey::class,
@@ -40,5 +37,14 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         stateAnswerBus()->addStateAnswers([
             MyWalletAnswer::class
         ]);
+    }
+
+    protected function registerPublishing(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../lang' => resource_path('lang/vendor/tbe-user-wallet'),
+            ], 'tbe-user-wallet-translations');
+        }
     }
 }
