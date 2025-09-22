@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49b83ae7806e8ebe058757c1f71e439f",
+    "content-hash": "56f01e8413450842d7bc0c6cf107540e",
     "packages": [
         {
             "name": "brick/math",
@@ -6107,11 +6107,17 @@
         },
         {
             "name": "telegram-bot-essentials/essence",
-            "version": "0.7.11",
+            "version": "dev-separation-step-by-step",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:Elyar0/telegram-bot-essentials.git",
+                "reference": "0cba44f22c13ac2733cab8adce4d34773e7daff0"
+            },
             "dist": {
-                "type": "path",
-                "url": "../telegram-bot-essentials",
-                "reference": "0a9a51f73496ecc8f321fb08b58b3898aa7f8df8"
+                "type": "zip",
+                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/0cba44f22c13ac2733cab8adce4d34773e7daff0",
+                "reference": "0cba44f22c13ac2733cab8adce4d34773e7daff0",
+                "shasum": ""
             },
             "require": {
                 "elyar/personal-laravel-helpers": "^0.0.2",
@@ -6151,9 +6157,11 @@
                 }
             ],
             "description": "This is the how i like to develop my bots and handle different incoming requests",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/Elyar0/telegram-bot-essentials/tree/separation-step-by-step",
+                "issues": "https://github.com/Elyar0/telegram-bot-essentials/issues"
+            },
+            "time": "2025-09-22T18:39:09+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -6430,7 +6438,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "telegram-bot-essentials/essence": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
