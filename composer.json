@@ -6,7 +6,7 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12",
-        "telegram-bot-essentials/essence": "*"
+        "telegram-bot-essentials/essence": "dev-separation-step-by-step",
     },
     "license": "MIT",
     "autoload": {
@@ -23,8 +23,8 @@
     "minimum-stability": "stable",
     "repositories": [
         {
-            "type": "path",
-            "url": "../telegram-bot-essentials"
+            "type": "vcs",
+            "url": "https://github.com/elyar0/telegram-bot-essentials"
         }
     ],
     "extra": {
