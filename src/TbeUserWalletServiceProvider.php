@@ -11,12 +11,24 @@ use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member\MyWalletAnswer
 
 class TbeUserWalletServiceProvider extends ServiceProvider
 {
+    public function register(): void
+    {
+
+    }
+
     /**
      * @throws LogicException
      * @throws BindingResolutionException
      */
-    public function register(): void
+    public function boot(): void
     {
+        $path = __DIR__ . '/../lang';
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-wallet');
+        app()->booted(function () use ($path) {
+            logger()->error('Translations loaded from: ' . $path);
+            logger()->error(__('tbe-user-wallet::my_wallet.reply_key'));
+        });
+
         replyKeyBus()->addReplyKeys([
             MyWalletKey::class,
         ]);
@@ -28,10 +40,5 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         stateAnswerBus()->addStateAnswers([
             MyWalletAnswer::class
         ]);
-    }
-
-    public function boot(): void
-    {
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-wallet');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace TelegramBotEssentials\UserWallet\Telegram\ReplyKeys\Member;
 
+use Illuminate\Support\Facades\Log;
 use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\UserWallet\Telegram\Features\Member\MyWalletFeature;
 use TelegramBotEssentials\Essence\Telegram\ReplyKeys\ReplyKey;
