@@ -1,5 +1,6 @@
 {
     "name": "telegram-bot-essentials/user-wallet",
+    "version": "0.0.1",
     "description": "User wallet feature built for telegram-bot-essentials/essence",
     "type": "library",
     "require": {
@@ -24,5 +25,12 @@
             "type": "path",
             "url": "../telegram-bot-essentials"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TelegramBotEssentials\\UserWallet\\TbeUserWalletServiceProvider"
+            ]
+        }
+    }
 }
