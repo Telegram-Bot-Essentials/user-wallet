@@ -29,4 +29,9 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             MyWalletAnswer::class
         ]);
     }
+
+    public function boot(): void
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-wallet');
+    }
 }

@@ -43,7 +43,7 @@ class MyWalletQuery extends CallbackQuery
         ]));
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
-            'text' => __('tbe::my_wallet.main.text.enterCreditAmount'),
+            'text' => __('tbe-user-wallet::my_wallet.main.text.enterCreditAmount'),
             'reply_markup' => wHook()->user()->getKeyboard()
         ]);
     }
