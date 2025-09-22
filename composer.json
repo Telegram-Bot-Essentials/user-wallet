@@ -6,7 +6,7 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12",
-        "telegram-bot-essentials/essence": "dev-separation-step-by-step",
+        "telegram-bot-essentials/essence": "dev-separation-step-by-step"
     },
     "license": "MIT",
     "autoload": {
