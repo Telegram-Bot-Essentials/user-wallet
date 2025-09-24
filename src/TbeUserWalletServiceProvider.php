@@ -26,10 +26,6 @@ class TbeUserWalletServiceProvider extends ServiceProvider
 
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-wallet');
 
-        replyKeyBus()->addReplyKeys([
-            MyWalletKey::class,
-        ]);
-
         callbackQueryBus()->addCallbackQueries([
             MyWalletQuery::class
         ]);
