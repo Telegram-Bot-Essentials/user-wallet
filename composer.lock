@@ -6111,12 +6111,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Elyar0/telegram-bot-essentials.git",
-                "reference": "f01a3115d8fae984cfc2f2cfba3ef74afa3d4f2e"
+                "reference": "f25683e8c3b9f6ffd424ac467469c7e6a50e634e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/f01a3115d8fae984cfc2f2cfba3ef74afa3d4f2e",
-                "reference": "f01a3115d8fae984cfc2f2cfba3ef74afa3d4f2e",
+                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/f25683e8c3b9f6ffd424ac467469c7e6a50e634e",
+                "reference": "f25683e8c3b9f6ffd424ac467469c7e6a50e634e",
                 "shasum": ""
             },
             "require": {
@@ -6161,7 +6161,7 @@
                 "source": "https://github.com/Elyar0/telegram-bot-essentials/tree/separation-step-by-step",
                 "issues": "https://github.com/Elyar0/telegram-bot-essentials/issues"
             },
-            "time": "2025-09-22T19:03:51+00:00"
+            "time": "2025-09-24T16:41:52+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
