@@ -2,15 +2,13 @@
 
 namespace TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member;
 
-use App\Models\Order;
-use App\Telegram\Features\Member\BuyServiceFeature;
 use Illuminate\Support\Facades\Validator;
 use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBotEssentials\Billing\Telegram\Features\Member\InvoiceFeature;
 use TelegramBotEssentials\Essence\Enums\AllowableFields;
 use TelegramBotEssentials\Essence\Enums\Roles;
-use TelegramBotEssentials\Essence\Models\CreditOrder;
+use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
-use TelegramBotEssentials\Essence\Telegram\Features\InvoiceFeature;
 use TelegramBotEssentials\Essence\Telegram\StateAnswers\StateAnswer;
 
 class MyWalletAnswer extends StateAnswer

@@ -6111,7 +6111,7 @@
             "dist": {
                 "type": "path",
                 "url": "../tbe-billing",
-                "reference": "71324c9e64506e6ea4d3354ee606ae41bbd1a1f3"
+                "reference": "0d06f3c3c8577cce5ffa216a458c1fd2c34aa95a"
             },
             "require": {
                 "elyar/personal-laravel-helpers": "v0.0.2",
@@ -6130,7 +6130,10 @@
             "autoload": {
                 "psr-4": {
                     "TelegramBotEssentials\\Billing\\": "src/"
-                }
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
             },
             "license": [
                 "MIT"

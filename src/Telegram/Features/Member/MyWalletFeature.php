@@ -4,7 +4,6 @@ namespace TelegramBotEssentials\UserWallet\Telegram\Features\Member;
 
 use TelegramBotEssentials\Essence\Telegram\TelegramResponse;
 use Telegram\Bot\Keyboard\Keyboard;
-use TelegramBotEssentials\UserWallet\TbeUserWalletServiceProvider;
 
 class MyWalletFeature
 {

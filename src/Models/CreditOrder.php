@@ -9,7 +9,7 @@ use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Billing\Models\Abstract\Order;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\UserWallet\Telegram\Features\Member\MyWalletFeature;
-use TelegramBotEssentials\Essence\Traits\HasInvoice;
+use TelegramBotEssentials\Billing\Traits\HasInvoice;
 use TelegramBotEssentials\Essence\Traits\HasMessageMeta;
 
 class CreditOrder extends Order
@@ -40,7 +40,7 @@ class CreditOrder extends Order
 
     public function getDescriptionAttribute(): string
     {
-        return __('tbe::credit_order.main.text.description', [
+        return __('tbe-billing::credit_order.main.text.description', [
             'price' => currency()->priceFormat($this->amount)
         ]);
     }
