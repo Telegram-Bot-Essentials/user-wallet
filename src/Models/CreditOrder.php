@@ -40,7 +40,7 @@ class CreditOrder extends Order
 
     public function getDescriptionAttribute(): string
     {
-        return __('tbe-billing::credit_order.main.text.description', [
+        return __('tbe-user-wallet::credit_order.main.text.description', [
             'price' => currency()->priceFormat($this->amount)
         ]);
     }
