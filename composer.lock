@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56f01e8413450842d7bc0c6cf107540e",
+    "content-hash": "2e1521f1d456b18c3fc7b7edd212857d",
     "packages": [
         {
             "name": "brick/math",
@@ -6106,18 +6106,53 @@
             "time": "2025-08-13T11:49:31+00:00"
         },
         {
-            "name": "telegram-bot-essentials/essence",
-            "version": "dev-separation-step-by-step",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:Elyar0/telegram-bot-essentials.git",
-                "reference": "f25683e8c3b9f6ffd424ac467469c7e6a50e634e"
-            },
+            "name": "telegram-bot-essentials/billing",
+            "version": "0.0.1",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/f25683e8c3b9f6ffd424ac467469c7e6a50e634e",
-                "reference": "f25683e8c3b9f6ffd424ac467469c7e6a50e634e",
-                "shasum": ""
+                "type": "path",
+                "url": "../tbe-billing",
+                "reference": "71324c9e64506e6ea4d3354ee606ae41bbd1a1f3"
+            },
+            "require": {
+                "elyar/personal-laravel-helpers": "v0.0.2",
+                "laravel/framework": "^12",
+                "php": "^8.2",
+                "telegram-bot-essentials/essence": "*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TelegramBotEssentials\\Billing\\TbeBillingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TelegramBotEssentials\\Billing\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elyar",
+                    "email": "elyareranjbar@gmail.com"
+                }
+            ],
+            "description": "Billing feature built for telegram-bot-essentials/essence",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "telegram-bot-essentials/essence",
+            "version": "0.7.11",
+            "dist": {
+                "type": "path",
+                "url": "../telegram-bot-essentials",
+                "reference": "f25683e8c3b9f6ffd424ac467469c7e6a50e634e"
             },
             "require": {
                 "elyar/personal-laravel-helpers": "^0.0.2",
@@ -6157,11 +6192,9 @@
                 }
             ],
             "description": "This is the how i like to develop my bots and handle different incoming requests",
-            "support": {
-                "source": "https://github.com/Elyar0/telegram-bot-essentials/tree/separation-step-by-step",
-                "issues": "https://github.com/Elyar0/telegram-bot-essentials/issues"
-            },
-            "time": "2025-09-24T16:41:52+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -6438,9 +6471,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "telegram-bot-essentials/essence": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

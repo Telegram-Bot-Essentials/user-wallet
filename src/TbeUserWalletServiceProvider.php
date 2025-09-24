@@ -24,6 +24,7 @@ class TbeUserWalletServiceProvider extends ServiceProvider
     {
         $this->registerPublishing();
 
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-wallet');
 
         callbackQueryBus()->addCallbackQueries([
