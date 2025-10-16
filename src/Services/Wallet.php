@@ -32,7 +32,9 @@ class Wallet
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
-            'text' => currency()->priceFormat($amount) . " 💸 successfully taken from your wallet",
+            'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [
+                'amount' => currency()->priceFormat($amount),
+            ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
     }
@@ -59,7 +61,7 @@ class Wallet
     {
         $this->validateAmount($amount);
         if (BigDecimal::of($amount)->compareTo($this->currentUserBalance()) > 0) {
-            throw new InsufficientBalanceException(__('tbe::invoice.by_wallet.answers.creditIsNotEnough', [
+            throw new InsufficientBalanceException(__('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
                 'credit' => currency()->priceFormat($this->currentUserBalance()),
                 'neededCredit' => currency()->priceFormat($amount)
             ]));
@@ -90,7 +92,9 @@ class Wallet
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
-            'text' => currency()->priceFormat($amount) . " 💸 successfully added to your wallet",
+            'text' => __('tbe-user-wallet::my_wallet.main.text.addAmountSuccess', [
+                'amount' => currency()->priceFormat($amount),
+            ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
     }
@@ -105,7 +109,9 @@ class Wallet
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
-            'text' => "Your total credit set to " . currency()->priceFormat($amount) . " 💸",
+            'text' => __('tbe-user-wallet::my_wallet.main.text.setAmountSuccess', [
+                'amount' => currency()->priceFormat($amount),
+            ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
     }

@@ -45,7 +45,9 @@ class MyWalletAnswer extends StateAnswer
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
-            'text' => "Creating invoice for amount of " . currency()->priceFormat($amount) . " 💸", // TODO: Localize this message
+            'text' => __('tbe-user-wallet::credit_order.main.text.creatingInvoice', [
+                'amount' => currency()->priceFormat($amount),
+            ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
 

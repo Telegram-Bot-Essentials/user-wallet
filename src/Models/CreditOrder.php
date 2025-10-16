@@ -57,7 +57,9 @@ class CreditOrder extends Order
             wHook()->user()->save();
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,
-                'text' => 'Your total credit increased by ' . currency()->priceFormat($this->amount) . ' 💸',
+                'text' => __('tbe-user-wallet::credit_order.main.text.creditIncreased', [
+                    'amount' => currency()->priceFormat($this->amount),
+                ]),
                 'reply_markup' => wHook()->user()->getKeyboard(),
             ]);
             MyWalletFeature::main()->send();
@@ -76,7 +78,9 @@ class CreditOrder extends Order
             wHook()->user()->save();
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,
-                'text' => 'Your total credit decreased by ' . currency()->priceFormat($this->amount) . ' 💸' . ' due to order cancellation',
+                'text' => __('tbe-user-wallet::credit_order.main.text.creditDecreased', [
+                    'amount' => currency()->priceFormat($this->amount),
+                ]),
                 'reply_markup' => wHook()->user()->getKeyboard(),
             ]);
             MyWalletFeature::main()->send();

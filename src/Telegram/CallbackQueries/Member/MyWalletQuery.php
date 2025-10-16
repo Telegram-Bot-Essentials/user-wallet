@@ -43,7 +43,7 @@ class MyWalletQuery extends CallbackQuery
         if($invoice->botUser->balance < $invoice->price){
             wHook()->api()->answerCallbackQuery([
                 'callback_query_id' => wHook()->update()->callbackQuery->id,
-                'text' => __('tbe-billing::invoice.by_wallet.answers.creditIsNotEnough', [
+                'text' => __('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
                     'credit' => currency()->priceFormat($invoice->botUser->balance),
                     'neededCredit' => currency()->priceFormat($invoice->price)
                 ]),
@@ -59,6 +59,6 @@ class MyWalletQuery extends CallbackQuery
         billing()->attemptPayment($invoice, $byWalletAttempt);
 
         $byWalletAttempt->attemptSucceed();
-        $invoice->messageMeta->lockAction(('tbe-billing::invoice.to_card.lock-keys.user-payment_accepted'), customEmoji: "✅");
+        $invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.to_card.lock-keys.user-payment_accepted'), customEmoji: "✅");
     }
 }
