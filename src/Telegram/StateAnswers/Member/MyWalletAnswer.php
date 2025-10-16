@@ -2,11 +2,13 @@
 
 namespace TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Validator;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Billing\Telegram\Features\Member\InvoiceFeature;
 use TelegramBotEssentials\Essence\Enums\AllowableFields;
 use TelegramBotEssentials\Essence\Enums\Roles;
+use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
 use TelegramBotEssentials\Essence\Telegram\StateAnswers\StateAnswer;
@@ -21,20 +23,10 @@ class MyWalletAnswer extends StateAnswer
 
     /**
      * @throws TelegramSDKException
+     * @throws BindingResolutionException
+     * @throws LogicException
      */
-    public function handle(string $method): void
-    {
-        switch (strtolower($method)) {
-            case "add_credit":
-                $this->addCredit();
-                break;
-        }
-    }
-
-    /**
-     * @throws TelegramSDKException
-     */
-    private function addCredit(): void
+    function addCredit(): void
     {
         $amount = wHook()->update()->message->text;
         Validator::validate(
@@ -65,7 +57,7 @@ class MyWalletAnswer extends StateAnswer
      */
     function cancel(): void
     {
-        $messageMeta = MessageMeta::find($this->params['message_meta_id']);
+        $messageMeta = MessageMeta::find($this->params['message_meta']);
         if ($messageMeta) {
             $messageMeta->continueAction();
         }
