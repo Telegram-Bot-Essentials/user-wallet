@@ -18,14 +18,11 @@ class CreditOrder extends Order
     use HasMessageMeta;
     use HasInvoice;
 
-    protected $appends = ['price', 'description', 'paid_at'];
+    protected $appends = ['description', 'paid_at'];
     protected $guarded = [
         'id',
         'created_at',
         'updated_at',
-    ];
-    protected $casts = [
-        'price' => 'int',
     ];
 
     public function getPaidAtAttribute(): ?Carbon
