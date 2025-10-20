@@ -9,6 +9,8 @@ use TelegramBotEssentials\Billing\DTOs\Gateway;
 use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Billing\Services\Gateways\Wallet;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
+use TelegramBotEssentials\Essence\Models\BotUser;
+use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQuery;
 use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member\MyWalletAnswer;
@@ -40,6 +42,9 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             MyWalletAnswer::class
         ]);
 
+        BotUser::resolveRelationUsing('wallets', function ($model) {
+            return $model->hasMany(BotUserWallet::class, 'bot_user_id');
+        });
         $this->registerToBilling();
     }
 
