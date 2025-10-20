@@ -14,7 +14,10 @@
     "autoload": {
         "psr-4": {
             "TelegramBotEssentials\\UserWallet\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {

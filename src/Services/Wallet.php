@@ -1,9 +1,10 @@
 <?php
 
-namespace TelegramBotEssentials\Billing\Services\Gateways;
+namespace TelegramBotEssentials\UserWallet\Services;
 
 
 use Brick\Math\BigDecimal;
+use TelegramBotEssentials\Billing\Services\CurrencyFather;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
@@ -24,11 +25,12 @@ class Wallet
     public function takeAmount(BigDecimal|string $amount): void
     {
         $this->validateAmount($amount);
+        $amount = $this->convertAmountToUserCurrency($amount);
         $this->validateMethodAllowed();
         $this->validateUserBalanceIsSufficient($amount);
 
-        wHook()->user()->balance = $this->currentUserBalance()->minus($amount);
-        wHook()->user()->save();
+        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->minus($amount);
+        wHook()->user()->wallet->save();
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -51,7 +53,7 @@ class Wallet
      */
     public function validateMethodAllowed(): void
     {
-        dependsOn(wHook()->bot()->settings->wallet, __('tbe::general.alerts.disabledFeature', ['feature' => __('tbe::bot_settings.wallet.name')]));
+        dependsOn(settings()->get('billing.user_wallet.status'), __('tbe::general.alerts.disabledFeature', ['feature' => __('tbe::bot_settings.wallet.name')]));
     }
 
     /**
@@ -60,17 +62,28 @@ class Wallet
     private function validateUserBalanceIsSufficient(BigDecimal|string $amount): void
     {
         $this->validateAmount($amount);
-        if (BigDecimal::of($amount)->compareTo($this->currentUserBalance()) > 0) {
+        if (BigDecimal::of($amount)->compareTo($this->currentUserWalletBalance()) > 0) {
             throw new InsufficientBalanceException(__('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
-                'credit' => currency()->priceFormat($this->currentUserBalance()),
-                'neededCredit' => currency()->priceFormat($amount)
+                'credit' => currency()->priceFormat(
+                    $this->currentUserWalletBalance(),
+                    currency: $this->currentUserWalletCurrency()
+                ),
+                'neededCredit' => currency()->priceFormat(
+                    $amount,
+                    currency: $this->currentUserWalletCurrency()
+                )
             ]));
         }
     }
 
-    public function currentUserBalance(): BigDecimal
+    public function currentUserWalletBalance(): BigDecimal
     {
-        return BigDecimal::of(wHook()->user()->balance);
+        return BigDecimal::of(wHook()->user()->wallet->balance);
+    }
+
+    public function currentUserWalletCurrency(): string
+    {
+        return wHook()->user()->wallet->currency;
     }
 
     /**
@@ -87,8 +100,8 @@ class Wallet
         $this->validateMethodAllowed();
         $this->validateUserBalanceIsSufficient($amount);
 
-        wHook()->user()->balance = $this->currentUserBalance()->plus($amount);
-        wHook()->user()->save();
+        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->plus($amount);
+        wHook()->user()->wallet->save();
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -104,8 +117,8 @@ class Wallet
         $this->validateAmount($amount);
         $this->validateMethodAllowed();
 
-        wHook()->user()->balance = $amount;
-        wHook()->user()->save();
+        wHook()->user()->wallet->balance = $amount;
+        wHook()->user()->wallet->save();
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -114,5 +127,12 @@ class Wallet
             ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
+    }
+
+    private function convertAmountToUserCurrency(BigDecimal|string $amount): BigDecimal|string
+    {
+        return BigDecimal::of(CurrencyFather::from(settings()->get('billing.currency'))
+            ->amount($amount)
+            ->to($this->currentUserWalletCurrency()));
     }
 }

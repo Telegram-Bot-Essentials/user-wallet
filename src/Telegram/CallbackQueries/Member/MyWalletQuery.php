@@ -41,27 +41,7 @@ class MyWalletQuery extends CallbackQuery
      */
     function byWallet(Invoice $invoice): void
     {
-        $price = CurrencyFather::from(settings()->get('billing.currency'))
-            ->amount($invoice->price)
-            ->to($invoice->botUser->wallet->currency);
-
-        if($invoice->botUser->wallet->balance < $price){
-            wHook()->api()->answerCallbackQuery([
-                'callback_query_id' => wHook()->update()->callbackQuery->id,
-                'text' => __('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
-                    'credit' => currency()->priceFormat(
-                        $invoice->botUser->wallet->balance,
-                        currency: $invoice->botUser->wallet->currency
-                    ),
-                    'neededCredit' => currency()->priceFormat(
-                        $price,
-                        currency: $invoice->botUser->wallet->currency
-                    )
-                ]),
-                'show_alert' => true,
-            ]);
-            return;
-        }
+        wallet()->takeAmount($invoice->price);
 
         $byWalletAttempt = ByWalletAttempt::create([
             'amount' => $invoice->price

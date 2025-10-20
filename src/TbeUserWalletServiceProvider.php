@@ -67,6 +67,13 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         ));
 
         settings()->addSetting(new Setting(
+            key: 'billing.user_wallet.status',
+            label: 'User Wallet Status',
+            type: SettingType::CHECKBOX,
+            default: true,
+        ));
+
+        settings()->addSetting(new Setting(
             key: 'billing.user_wallet.currency',
             label: 'Wallet Currency',
             type: SettingType::ENUM,
