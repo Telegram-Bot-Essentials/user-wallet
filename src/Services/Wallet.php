@@ -25,17 +25,17 @@ class Wallet
     public function takeAmount(BigDecimal|string $amount): void
     {
         $this->validateAmount($amount);
-        $amount = $this->convertAmountToUserCurrency($amount);
+        $amountForUser = $this->convertAmountToUserCurrency($amount);
         $this->validateMethodAllowed();
         $this->validateUserBalanceIsSufficient($amount);
 
-        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->minus($amount);
+        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->minus($amountForUser);
         wHook()->user()->wallet->save();
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [
-                'amount' => currency()->priceFormat($amount),
+                'amount' => currency()->priceFormat($amountForUser, currency: $this->currentUserWalletCurrency()),
             ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
@@ -62,14 +62,15 @@ class Wallet
     private function validateUserBalanceIsSufficient(BigDecimal|string $amount): void
     {
         $this->validateAmount($amount);
-        if (BigDecimal::of($amount)->compareTo($this->currentUserWalletBalance()) > 0) {
+        $amountForUser = $this->convertAmountToUserCurrency($amount);
+        if (BigDecimal::of($amountForUser)->compareTo($this->currentUserWalletBalance()) > 0) {
             throw new InsufficientBalanceException(__('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
                 'credit' => currency()->priceFormat(
                     $this->currentUserWalletBalance(),
                     currency: $this->currentUserWalletCurrency()
                 ),
                 'neededCredit' => currency()->priceFormat(
-                    $amount,
+                    $amountForUser,
                     currency: $this->currentUserWalletCurrency()
                 )
             ]));
