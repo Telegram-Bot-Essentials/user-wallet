@@ -30,6 +30,10 @@
         {
             "type": "path",
             "url": "../tbe-billing"
+        },
+        {
+            "type": "path",
+            "url": "../tbe-settings"
         }
     ],
     "extra": {

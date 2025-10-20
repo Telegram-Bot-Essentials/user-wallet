@@ -42,8 +42,14 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             MyWalletAnswer::class
         ]);
 
-        BotUser::resolveRelationUsing('wallets', function ($model) {
-            return $model->hasMany(BotUserWallet::class, 'bot_user_id');
+        BotUser::resolveRelationUsing('wallet', function (BotUser $model) {
+            return $model->hasOne(BotUserWallet::class, 'bot_user_id')
+                ->withDefault(function (BotUserWallet $wallet, BotUser $user) {
+                    $wallet->bot_id = wHook()->bot()->id;
+                    $wallet->bot_user_id = $user->id;
+                    $wallet->currency = config('tbe-user-wallet.currency', 'USD');
+                    $wallet->save();
+                });
         });
         $this->registerToBilling();
     }

@@ -2,8 +2,8 @@
 
 namespace TelegramBotEssentials\UserWallet\Telegram\Features\Member;
 
-use TelegramBotEssentials\Essence\Telegram\TelegramResponse;
 use Telegram\Bot\Keyboard\Keyboard;
+use TelegramBotEssentials\Essence\Telegram\TelegramResponse;
 
 class MyWalletFeature
 {
@@ -12,7 +12,7 @@ class MyWalletFeature
     public static function main(): TelegramResponse
     {
         $text = __('tbe-user-wallet::my_wallet.main.text.totalCredit', [
-            'price' => currency()->priceFormat(wHook()->user()->balance)
+            'price' => currency()->priceFormat(wHook()->user()->wallet->balance)
         ]);
 
         $replyMarkup = Keyboard::make()

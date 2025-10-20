@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Bot::class)->constrained();
             $table->foreignIdFor(BotUser::class)->constrained();
-            $table->decimal('amount', 65, 30);
+            $table->decimal('balance', 65, 30)->default(0);
             $table->char('currency', 3)->default('USD');
             $table->timestamps();
 
