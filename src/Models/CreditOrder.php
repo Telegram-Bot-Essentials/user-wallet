@@ -50,8 +50,8 @@ class CreditOrder extends Order
     public function invoicePaidHook(): void
     {
         wHook()->runForUser($this->botUser, function () {
-            wHook()->user()->balance += $this->amount;
-            wHook()->user()->save();
+            wHook()->user()->wallet->balance += $this->amount;
+            wHook()->user()->wallet->save();
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,
                 'text' => __('tbe-user-wallet::credit_order.main.text.creditIncreased', [
@@ -71,8 +71,8 @@ class CreditOrder extends Order
     public function cancelOrderHook(): void
     {
         wHook()->runForUser($this->botUser, function () {
-            wHook()->user()->balance -= $this->amount;
-            wHook()->user()->save();
+            wHook()->user()->wallet->balance -= $this->amount;
+            wHook()->user()->wallet->save();
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,
                 'text' => __('tbe-user-wallet::credit_order.main.text.creditDecreased', [
