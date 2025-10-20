@@ -10,6 +10,8 @@ use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Billing\Services\Gateways\Wallet;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
+use TelegramBotEssentials\Settings\DTOs\Setting;
+use TelegramBotEssentials\Settings\Enums\SettingType;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQuery;
@@ -51,6 +53,25 @@ class TbeUserWalletServiceProvider extends ServiceProvider
                 });
         });
         $this->registerToBilling();
+
+        $this->addSettings();
+    }
+
+    private function addSettings(): void
+    {
+        settings()->addSetting(new Setting(
+            key: 'billing.user_wallet',
+            label: 'User Wallet',
+            type: SettingType::DIRECTORY,
+        ));
+
+        settings()->addSetting(new Setting(
+            key: 'billing.user_wallet.currency',
+            label: 'Wallet Currency',
+            type: SettingType::ENUM,
+            default: 'USD',
+            options: collect(config('tbe-billing.supported_currencies', []))->pluck('name')->toArray()
+        ));
     }
 
     protected function registerPublishing(): void

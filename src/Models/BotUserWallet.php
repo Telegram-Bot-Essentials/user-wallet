@@ -23,7 +23,7 @@ class BotUserWallet extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->currency = settings()->get('billing.currency');
+            $model->currency = settings()->get('billing.user_wallet.currency');
         });
     }
 
