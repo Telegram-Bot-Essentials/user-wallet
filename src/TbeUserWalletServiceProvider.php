@@ -47,7 +47,6 @@ class TbeUserWalletServiceProvider extends ServiceProvider
                 ->withDefault(function (BotUserWallet $wallet, BotUser $user) {
                     $wallet->bot_id = wHook()->bot()->id;
                     $wallet->bot_user_id = $user->id;
-                    $wallet->currency = config('tbe-user-wallet.currency', 'USD');
                     $wallet->save();
                 });
         });

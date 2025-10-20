@@ -3,12 +3,14 @@
 namespace TelegramBotEssentials\UserWallet\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 use TelegramBotEssentials\Billing\Models\Abstract\PaymentAttempt;
 use TelegramBotEssentials\Billing\Models\Payment;
 use TelegramBotEssentials\Essence\Traits\HasMessageMeta;
 
 class ByWalletAttempt extends PaymentAttempt
 {
+    use BelongsToTenant;
     use HasMessageMeta;
     protected $guarded = [
         'id',
