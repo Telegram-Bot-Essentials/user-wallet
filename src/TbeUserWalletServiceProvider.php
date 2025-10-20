@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Telegram\Bot\Keyboard\Keyboard;
 use TelegramBotEssentials\Billing\DTOs\Gateway;
 use TelegramBotEssentials\Billing\Models\Invoice;
+use TelegramBotEssentials\Billing\Services\CurrencyFather;
 use TelegramBotEssentials\Billing\Services\Gateways\Wallet;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
@@ -93,7 +94,12 @@ class TbeUserWalletServiceProvider extends ServiceProvider
                     return null;
                 }
                 return Keyboard::inlineButton([
-                    'text' => 'Pay with wallet',
+                    'text' => 'Pay with wallet - ' . currency()->priceFormat(
+                        CurrencyFather::from(settings()->get('billing.currency'))
+                            ->amount($invoice->price)
+                            ->to($invoice->botUser->wallet->currency),
+                        currency: $invoice->botUser->wallet->currency
+                        ),
                     'callback_data' => encodeCallback('MYWALLET', 'byWallet', [$invoice->id])
                 ]);
             }

@@ -6038,7 +6038,7 @@
             "dist": {
                 "type": "path",
                 "url": "../tbe-billing",
-                "reference": "3f057e26751629a4854e75f1352f4eb9abf539ce"
+                "reference": "a36217ec48da626adbaa63296aced9d0b67eb807"
             },
             "require": {
                 "elyar/personal-laravel-helpers": "v0.0.2",

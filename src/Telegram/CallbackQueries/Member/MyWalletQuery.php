@@ -6,6 +6,7 @@ use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
+use TelegramBotEssentials\Billing\Services\CurrencyFather;
 use TelegramBotEssentials\Essence\Telegram\CallbackQueries\CallbackQuery;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -26,7 +27,7 @@ class MyWalletQuery extends CallbackQuery
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->deleteMessage();
         wHook()->user()->changeState(encodeAnswerState($this->type, "add_credit", [
-            'message_meta_id' => $messageMeta->id
+            'message_meta' => $messageMeta->id
         ]));
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -40,12 +41,22 @@ class MyWalletQuery extends CallbackQuery
      */
     function byWallet(Invoice $invoice): void
     {
-        if($invoice->botUser->balance < $invoice->price){
+        $price = CurrencyFather::from(settings()->get('billing.currency'))
+            ->amount($invoice->price)
+            ->to($invoice->botUser->wallet->currency);
+
+        if($invoice->botUser->wallet->balance < $price){
             wHook()->api()->answerCallbackQuery([
                 'callback_query_id' => wHook()->update()->callbackQuery->id,
                 'text' => __('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
-                    'credit' => currency()->priceFormat($invoice->botUser->balance),
-                    'neededCredit' => currency()->priceFormat($invoice->price)
+                    'credit' => currency()->priceFormat(
+                        $invoice->botUser->wallet->balance,
+                        currency: $invoice->botUser->wallet->currency
+                    ),
+                    'neededCredit' => currency()->priceFormat(
+                        $price,
+                        currency: $invoice->botUser->wallet->currency
+                    )
                 ]),
                 'show_alert' => true,
             ]);
