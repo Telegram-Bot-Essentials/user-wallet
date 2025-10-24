@@ -70,7 +70,6 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             key: 'billing.user_wallet.status',
             label: 'User Wallet Status',
             type: SettingType::CHECKBOX,
-            default: true,
         ));
 
         settings()->addSetting(new Setting(
@@ -98,6 +97,9 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             label: 'Wallet',
             inlineButtonGenerator: function (Invoice $invoice) {
                 if($invoice->payable instanceof CreditOrder){
+                    return null;
+                }
+                if(!settings()->get('billing.user_wallet.status')){
                     return null;
                 }
                 return Keyboard::inlineButton([
