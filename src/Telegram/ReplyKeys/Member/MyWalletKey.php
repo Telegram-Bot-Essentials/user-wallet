@@ -26,4 +26,9 @@ class MyWalletKey extends ReplyKey
     {
         MyWalletFeature::main()->send();
     }
+
+    public function isEnabled(): bool
+    {
+        return settings()->get('billing.user_wallet.status');
+    }
 }

@@ -4,7 +4,9 @@ namespace TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member;
 
 use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Essence\Enums\Roles;
+use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
+use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
 use TelegramBotEssentials\Billing\Services\CurrencyFather;
 use TelegramBotEssentials\Essence\Telegram\CallbackQueries\CallbackQuery;
@@ -21,9 +23,11 @@ class MyWalletQuery extends CallbackQuery
      * @throws TelegramSDKException
      * @throws BindingResolutionException
      * @throws LogicException
+     * @throws FeatureIsDisabled
      */
     function addCredit(): void
     {
+        dependsOn(settings()->get('billing.user_wallet.status'));
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->deleteMessage();
         wHook()->user()->changeState(encodeAnswerState($this->type, "add_credit", [
@@ -37,10 +41,16 @@ class MyWalletQuery extends CallbackQuery
     }
 
     /**
+     * @param Invoice $invoice
+     * @throws BindingResolutionException
+     * @throws FeatureIsDisabled
+     * @throws LogicException
      * @throws TelegramSDKException
+     * @throws TbeLogicException
      */
     function byWallet(Invoice $invoice): void
     {
+        dependsOn(settings()->get('billing.user_wallet.status'));
         wallet()->takeAmount($invoice->price);
 
         $byWalletAttempt = ByWalletAttempt::create([

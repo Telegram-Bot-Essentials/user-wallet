@@ -8,6 +8,7 @@ use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Billing\Telegram\Features\Member\InvoiceFeature;
 use TelegramBotEssentials\Essence\Enums\AllowableFields;
 use TelegramBotEssentials\Essence\Enums\Roles;
+use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
@@ -25,9 +26,11 @@ class MyWalletAnswer extends StateAnswer
      * @throws TelegramSDKException
      * @throws BindingResolutionException
      * @throws LogicException
+     * @throws FeatureIsDisabled
      */
     function addCredit(): void
     {
+        dependsOn(settings()->get('billing.user_wallet.status'));
         $amount = wHook()->update()->message->text;
         Validator::validate(
             ['amount' => $amount],
