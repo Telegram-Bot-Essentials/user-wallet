@@ -27,7 +27,7 @@ class ByWalletAttempt extends PaymentAttempt
         $this->received_at = now();
         $this->save();
         $this->paymentAttempt->invoice->triggerInvoicePaidHook();
-        $this->paymentAttempt->invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.to_card.lock-keys.user-payment_accepted'), customEmoji: "✅");
+        $this->paymentAttempt->invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.locks.user_payment.accepted'), customEmoji: "✅");
     }
 
     public function paymentAttempt(): BelongsTo

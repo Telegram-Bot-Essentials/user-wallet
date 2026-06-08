@@ -60,6 +60,6 @@ class MyWalletQuery extends CallbackQuery
         billing()->attemptPayment($invoice, $byWalletAttempt);
 
         $byWalletAttempt->attemptSucceed();
-        $invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.to_card.lock-keys.user-payment_accepted'), customEmoji: "✅");
+        $invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.locks.user_payment.accepted'), customEmoji: "✅");
     }
 }

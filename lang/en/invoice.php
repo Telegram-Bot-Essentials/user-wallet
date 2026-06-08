@@ -3,14 +3,17 @@
 return [
     'by_wallet' => [
         'answers' => [
-            'creditIsNotEnough' => '⛔️ Your credit is not enough for paying this invoice.'
-                . "\r\nYour credit: :credit"
-                . "\r\nNeeded credit: :neededCredit",
+            'creditIsNotEnough' => '⛔️ Your wallet balance is not enough to pay this invoice.'
+                . "\r\nYour balance: :credit"
+                . "\r\nRequired: :neededCredit",
+        ],
+        'keys' => [
+            'pay' => 'Pay with wallet 💰 - :price',
         ],
     ],
-    'to_card' => [
-        'lock-keys' => [
-            'user-payment_accepted' => 'Payment accepted',
+    'locks' => [
+        'user_payment' => [
+            'accepted' => '✅ Payment accepted via wallet',
         ],
     ],
 ];

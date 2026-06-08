@@ -104,12 +104,14 @@ class TbeUserWalletServiceProvider extends ServiceProvider
                     return null;
                 }
                 return Keyboard::inlineButton([
-                    'text' => 'Pay with wallet - ' . currency()->priceFormat(
-                        CurrencyFather::from(settings()->get('billing.currency'))
-                            ->amount($invoice->price)
-                            ->to($invoice->botUser->wallet->currency),
-                        currency: $invoice->botUser->wallet->currency
+                    'text' => __('tbe-user-wallet::invoice.by_wallet.keys.pay', [
+                        'price' => currency()->priceFormat(
+                            CurrencyFather::from(settings()->get('billing.currency'))
+                                ->amount($invoice->price)
+                                ->to($invoice->botUser->wallet->currency),
+                            currency: $invoice->botUser->wallet->currency
                         ),
+                    ]),
                     'callback_data' => encodeCallback('MYWALLET', 'byWallet', [$invoice->id])
                 ]);
             }

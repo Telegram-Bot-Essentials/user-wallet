@@ -3,14 +3,17 @@
 return [
     'by_wallet' => [
         'answers' => [
-            'creditIsNotEnough' => '⛔️ اعتبار شما برای پرداخت این فاکتور کافی نیست.'
-                . "\r\nاعتبار شما: :credit"
-                . "\r\nاعتبار مورد نیاز: :neededCredit",
+            'creditIsNotEnough' => '⛔️ موجودی کیف پول شما برای پرداخت این فاکتور کافی نیست.'
+                . "\r\nموجودی شما: :credit"
+                . "\r\nمبلغ مورد نیاز: :neededCredit",
+        ],
+        'keys' => [
+            'pay' => 'پرداخت با کیف پول 💰 - :price',
         ],
     ],
-    'to_card' => [
-        'lock-keys' => [
-            'user-payment_accepted' => 'پرداخت تایید شد',
+    'locks' => [
+        'user_payment' => [
+            'accepted' => '✅ پرداخت با کیف پول تأیید شد',
         ],
     ],
 ];
