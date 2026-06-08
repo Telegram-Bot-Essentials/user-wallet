@@ -70,6 +70,7 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             key: 'billing.user_wallet.status',
             label: 'User Wallet Status',
             type: SettingType::CHECKBOX,
+            default: false
         ));
 
         settings()->addSetting(new Setting(
