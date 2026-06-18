@@ -13,6 +13,7 @@ use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Settings\DTOs\Setting;
 use TelegramBotEssentials\Settings\Enums\SettingType;
+use TelegramBotEssentials\UserWallet\Integrations\BotUserManagementIntegration;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQuery;
@@ -56,6 +57,8 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         $this->registerToBilling();
 
         $this->addSettings();
+
+        $this->app->booted(fn () => BotUserManagementIntegration::register());
     }
 
     private function addSettings(): void
