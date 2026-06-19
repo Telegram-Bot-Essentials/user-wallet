@@ -25,6 +25,9 @@
         }
     ],
     "minimum-stability": "stable",
+    "suggest": {
+        "telegram-bot-essentials/user-management": "Adds wallet balance sorting to the bot users admin menu."
+    },
     "repositories": [
         {
             "type": "vcs",

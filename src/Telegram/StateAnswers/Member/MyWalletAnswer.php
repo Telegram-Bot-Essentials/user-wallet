@@ -56,15 +56,4 @@ class MyWalletAnswer extends StateAnswer
 
         InvoiceFeature::invoice($invoice)->send();
     }
-
-    /**
-     * @throws TelegramSDKException
-     */
-    function cancel(): void
-    {
-        $messageMeta = MessageMeta::find($this->params['message_meta']);
-        if ($messageMeta) {
-            $messageMeta->continueAction();
-        }
-    }
 }
