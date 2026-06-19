@@ -3,6 +3,7 @@
 namespace TelegramBotEssentials\UserWallet;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Telegram\Bot\Keyboard\Keyboard;
 use TelegramBotEssentials\Billing\DTOs\Gateway;
@@ -13,6 +14,8 @@ use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Settings\DTOs\Setting;
 use TelegramBotEssentials\Settings\Enums\SettingType;
+use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
+use TelegramBotEssentials\UserManagement\Services\BotUserSorts;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQuery;
@@ -56,6 +59,8 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         $this->registerToBilling();
 
         $this->addSettings();
+
+        $this->registerUserManagementSort();
     }
 
     private function addSettings(): void
@@ -89,6 +94,34 @@ class TbeUserWalletServiceProvider extends ServiceProvider
                 __DIR__ . '/../lang' => resource_path('lang/vendor/tbe-user-wallet'),
             ], 'tbe-user-wallet-translations');
         }
+    }
+
+    private function registerUserManagementSort(): void
+    {
+        if (! class_exists(BotUserSorts::class)) {
+            return;
+        }
+
+        app(BotUserSorts::class)->addSort(new BotUserSort(
+            key: 'wallet_balance',
+            label: __('tbe-user-wallet::bot_users.sorts.wallet_balance'),
+            apply: function ($query, $direction) {
+                $botId = wHook()->bot()->id;
+
+                return $query
+                    ->leftJoin('bot_user_wallets', function ($join) use ($botId) {
+                        $join->on('bot_user_wallets.bot_user_id', '=', 'bot_users.id')
+                            ->where('bot_user_wallets.bot_id', $botId);
+                    })
+                    ->select('bot_users.*', DB::raw('COALESCE(bot_user_wallets.balance, 0) as wallet_balance'))
+                    ->orderBy('bot_user_wallets.balance', $direction);
+            },
+            display: fn (BotUser $user) => currency()->priceFormat(
+                $user->wallet_balance ?? 0,
+                currency: settings()->get('billing.user_wallet.currency'),
+            ),
+            active: fn () => (bool) settings()->get('billing.user_wallet.status'),
+        ));
     }
 
     private function registerToBilling(): void
