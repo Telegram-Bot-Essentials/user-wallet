@@ -67,23 +67,23 @@ class TbeUserWalletServiceProvider extends ServiceProvider
     {
         settings()->addSetting(new Setting(
             key: 'billing.user_wallet',
-            label: 'User Wallet',
+            label: fn () => __('tbe-user-wallet::settings.labels.user_wallet'),
             type: SettingType::DIRECTORY,
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.user_wallet.status',
-            label: 'User Wallet Status',
+            label: fn () => __('tbe-user-wallet::settings.labels.status'),
             type: SettingType::CHECKBOX,
             default: false
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.user_wallet.currency',
-            label: 'Wallet Currency',
+            label: fn () => __('tbe-user-wallet::settings.labels.currency'),
             type: SettingType::ENUM,
             default: 'USD',
-            options: collect(config('tbe-billing.supported_currencies', []))->pluck('name')->toArray()
+            options: fn () => collect(config('tbe-billing.supported_currencies', []))->pluck('name')->toArray(),
         ));
     }
 
