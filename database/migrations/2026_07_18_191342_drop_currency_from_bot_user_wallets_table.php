@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bot_user_wallets', function (Blueprint $table) {
+            // bot_id's foreign key relies on an index covering it as a leftmost column;
+            // the new unique must exist before the old composite one is dropped.
+            $table->unique(['bot_id', 'bot_user_id']);
             $table->dropUnique(['bot_id', 'bot_user_id', 'currency']);
             $table->dropColumn('currency');
-            $table->unique(['bot_id', 'bot_user_id']);
         });
     }
 
@@ -24,9 +26,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bot_user_wallets', function (Blueprint $table) {
-            $table->dropUnique(['bot_id', 'bot_user_id']);
             $table->char('currency', 3)->default('USD');
             $table->unique(['bot_id', 'bot_user_id', 'currency']);
+            $table->dropUnique(['bot_id', 'bot_user_id']);
         });
     }
 };
