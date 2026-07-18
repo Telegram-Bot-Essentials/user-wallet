@@ -4,7 +4,6 @@ namespace TelegramBotEssentials\UserWallet\Services;
 
 
 use Brick\Math\BigDecimal;
-use TelegramBotEssentials\Billing\Services\CurrencyFather;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
@@ -25,17 +24,16 @@ class Wallet
     public function takeAmount(BigDecimal|string $amount): void
     {
         $this->validateAmount($amount);
-        $amountForUser = $this->convertAmountToUserCurrency($amount);
         $this->validateMethodAllowed();
         $this->validateUserBalanceIsSufficient($amount);
 
-        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->minus($amountForUser);
+        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->minus($amount);
         wHook()->user()->wallet->save();
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [
-                'amount' => currency()->priceFormat($amountForUser, currency: $this->currentUserWalletCurrency()),
+                'amount' => currency()->priceFormat($amount),
             ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
@@ -62,17 +60,10 @@ class Wallet
     private function validateUserBalanceIsSufficient(BigDecimal|string $amount): void
     {
         $this->validateAmount($amount);
-        $amountForUser = $this->convertAmountToUserCurrency($amount);
-        if (BigDecimal::of($amountForUser)->compareTo($this->currentUserWalletBalance()) > 0) {
+        if (BigDecimal::of($amount)->compareTo($this->currentUserWalletBalance()) > 0) {
             throw new InsufficientBalanceException(__('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
-                'credit' => currency()->priceFormat(
-                    $this->currentUserWalletBalance(),
-                    currency: $this->currentUserWalletCurrency()
-                ),
-                'neededCredit' => currency()->priceFormat(
-                    $amountForUser,
-                    currency: $this->currentUserWalletCurrency()
-                )
+                'credit' => currency()->priceFormat($this->currentUserWalletBalance()),
+                'neededCredit' => currency()->priceFormat($amount),
             ]));
         }
     }
@@ -80,11 +71,6 @@ class Wallet
     public function currentUserWalletBalance(): BigDecimal
     {
         return BigDecimal::of(wHook()->user()->wallet->balance);
-    }
-
-    public function currentUserWalletCurrency(): string
-    {
-        return wHook()->user()->wallet->currency;
     }
 
     /**
@@ -128,12 +114,5 @@ class Wallet
             ]),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
-    }
-
-    private function convertAmountToUserCurrency(BigDecimal|string $amount): BigDecimal|string
-    {
-        return BigDecimal::of(CurrencyFather::from(settings()->get('billing.currency'))
-            ->amount($amount)
-            ->to($this->currentUserWalletCurrency()));
     }
 }

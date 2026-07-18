@@ -18,15 +18,6 @@ class BotUserWallet extends Model
         'updated_at',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->currency = settings()->get('billing.user_wallet.currency');
-        });
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(BotUser::class);
