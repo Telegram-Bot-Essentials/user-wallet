@@ -3,6 +3,7 @@
 namespace TelegramBotEssentials\UserWallet\Telegram\ReplyKeys\Member;
 
 use TelegramBotEssentials\Essence\Enums\Roles;
+use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\UserWallet\Telegram\Features\Member\MyWalletFeature;
 use TelegramBotEssentials\Essence\Telegram\ReplyKeys\ReplyKey;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -21,9 +22,12 @@ class MyWalletKey extends ReplyKey
 
     /**
      * @throws TelegramSDKException
+     * @throws FeatureIsDisabled
      */
     public function handle(): void
     {
+        dependsOn(settings()->get('billing.user_wallet.status'));
+
         MyWalletFeature::main()->send();
     }
 
