@@ -139,4 +139,34 @@ class Wallet
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
     }
+
+    /**
+     * System-initiated balance mutation (affiliate commissions/bonuses, refund
+     * reversals, etc). Unlike addAmount()/takeAmount() this does NOT check
+     * validateMethodAllowed() — the wallet-feature toggle only governs whether
+     * a user can manually top up or spend their wallet, not whether the
+     * underlying ledger keeps working for automated system credits/debits.
+     * It also never sends a message; callers own their own notification copy.
+     *
+     * @throws InsufficientBalanceException
+     */
+    public function adjustBalance(BigDecimal|string $amount, bool $allowNegative = false): void
+    {
+        $this->validateAmount($amount);
+
+        DB::transaction(function () use ($amount, $allowNegative) {
+            $wallet = $this->lockedWallet();
+            $newBalance = BigDecimal::of($wallet->balance)->plus($amount);
+
+            if (!$allowNegative && $newBalance->isNegative()) {
+                throw new InsufficientBalanceException(__('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
+                    'credit' => currency()->priceFormat($wallet->balance),
+                    'neededCredit' => currency()->priceFormat($amount->abs()),
+                ]));
+            }
+
+            $wallet->balance = $newBalance;
+            $wallet->save();
+        });
+    }
 }
