@@ -2,8 +2,10 @@
 
 namespace TelegramBotEssentials\UserWallet\Models;
 
+use Brick\Math\BigDecimal;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Billing\Models\Abstract\Order;
@@ -50,8 +52,11 @@ class CreditOrder extends Order
     public function invoicePaidHook(): void
     {
         wHook()->runForUser($this->botUser, function () {
-            wHook()->user()->wallet->balance += $this->amount;
-            wHook()->user()->wallet->save();
+            DB::transaction(function () {
+                $wallet = $this->lockedWallet();
+                $wallet->balance = BigDecimal::of($wallet->balance)->plus($this->amount);
+                $wallet->save();
+            });
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,
                 'text' => __('tbe-user-wallet::credit_order.main.text.creditIncreased', [
@@ -71,8 +76,11 @@ class CreditOrder extends Order
     public function cancelOrderHook(): void
     {
         wHook()->runForUser($this->botUser, function () {
-            wHook()->user()->wallet->balance -= $this->amount;
-            wHook()->user()->wallet->save();
+            DB::transaction(function () {
+                $wallet = $this->lockedWallet();
+                $wallet->balance = BigDecimal::of($wallet->balance)->minus($this->amount);
+                $wallet->save();
+            });
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,
                 'text' => __('tbe-user-wallet::credit_order.main.text.creditDecreased', [
@@ -82,5 +90,12 @@ class CreditOrder extends Order
             ]);
             MyWalletFeature::main()->send();
         });
+    }
+
+    private function lockedWallet(): BotUserWallet
+    {
+        $wallet = wHook()->user()->wallet;
+
+        return BotUserWallet::whereKey($wallet->id)->lockForUpdate()->firstOrFail();
     }
 }

@@ -2,14 +2,15 @@
 
 namespace TelegramBotEssentials\UserWallet\Services;
 
-
 use Brick\Math\BigDecimal;
+use Illuminate\Support\Facades\DB;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicExceptions\InsufficientBalanceException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 
 class Wallet
 {
@@ -20,15 +21,20 @@ class Wallet
      * @throws TelegramSDKException
      * @throws LogicException
      * @throws BindingResolutionException
+     * @throws InsufficientBalanceException
      */
     public function takeAmount(BigDecimal|string $amount): void
     {
         $this->validateAmount($amount);
         $this->validateMethodAllowed();
-        $this->validateUserBalanceIsSufficient($amount);
 
-        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->minus($amount);
-        wHook()->user()->wallet->save();
+        DB::transaction(function () use ($amount) {
+            $wallet = $this->lockedWallet();
+            $this->validateBalanceIsSufficient($wallet, $amount);
+
+            $wallet->balance = BigDecimal::of($wallet->balance)->minus($amount);
+            $wallet->save();
+        });
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -55,14 +61,25 @@ class Wallet
     }
 
     /**
+     * Ensures the row backing $wallet exists, then re-fetches it with a row lock
+     * so concurrent balance mutations for the same user serialize instead of
+     * racing on a stale read.
+     */
+    private function lockedWallet(): BotUserWallet
+    {
+        $wallet = wHook()->user()->wallet;
+
+        return BotUserWallet::whereKey($wallet->id)->lockForUpdate()->firstOrFail();
+    }
+
+    /**
      * @throws InsufficientBalanceException
      */
-    private function validateUserBalanceIsSufficient(BigDecimal|string $amount): void
+    private function validateBalanceIsSufficient(BotUserWallet $wallet, BigDecimal|string $amount): void
     {
-        $this->validateAmount($amount);
-        if (BigDecimal::of($amount)->compareTo($this->currentUserWalletBalance()) > 0) {
+        if (BigDecimal::of($amount)->compareTo($wallet->balance) > 0) {
             throw new InsufficientBalanceException(__('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
-                'credit' => currency()->priceFormat($this->currentUserWalletBalance()),
+                'credit' => currency()->priceFormat($wallet->balance),
                 'neededCredit' => currency()->priceFormat($amount),
             ]));
         }
@@ -85,10 +102,13 @@ class Wallet
     {
         $this->validateAmount($amount);
         $this->validateMethodAllowed();
-        $this->validateUserBalanceIsSufficient($amount);
 
-        wHook()->user()->wallet->balance = $this->currentUserWalletBalance()->plus($amount);
-        wHook()->user()->wallet->save();
+        DB::transaction(function () use ($amount) {
+            $wallet = $this->lockedWallet();
+
+            $wallet->balance = BigDecimal::of($wallet->balance)->plus($amount);
+            $wallet->save();
+        });
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -104,8 +124,12 @@ class Wallet
         $this->validateAmount($amount);
         $this->validateMethodAllowed();
 
-        wHook()->user()->wallet->balance = $amount;
-        wHook()->user()->wallet->save();
+        DB::transaction(function () use ($amount) {
+            $wallet = $this->lockedWallet();
+
+            $wallet->balance = $amount;
+            $wallet->save();
+        });
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
