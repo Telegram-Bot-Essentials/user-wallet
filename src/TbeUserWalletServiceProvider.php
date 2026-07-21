@@ -52,6 +52,7 @@ class TbeUserWalletServiceProvider extends ServiceProvider
                 ->withDefault(function (BotUserWallet $wallet, BotUser $user) {
                     $wallet->bot_id = wHook()->bot()->id;
                     $wallet->bot_user_id = $user->id;
+                    $wallet->balance = 0;
                     $wallet->save();
                 });
         });
