@@ -56,6 +56,7 @@ class CreditOrder extends Order
                 $wallet = $this->lockedWallet();
                 $wallet->balance = BigDecimal::of($wallet->balance)->plus($this->amount);
                 $wallet->save();
+                wHook()->user()->setRelation('wallet', $wallet);
             });
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -80,6 +81,7 @@ class CreditOrder extends Order
                 $wallet = $this->lockedWallet();
                 $wallet->balance = BigDecimal::of($wallet->balance)->minus($this->amount);
                 $wallet->save();
+                wHook()->user()->setRelation('wallet', $wallet);
             });
             wHook()->api()->sendMessage([
                 'chat_id' => wHook()->user()->telegramUser->peer_id,

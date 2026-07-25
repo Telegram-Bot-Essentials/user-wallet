@@ -34,6 +34,7 @@ class Wallet
 
             $wallet->balance = BigDecimal::of($wallet->balance)->minus($amount);
             $wallet->save();
+            wHook()->user()->setRelation('wallet', $wallet);
         });
 
         wHook()->api()->sendMessage([
@@ -108,6 +109,7 @@ class Wallet
 
             $wallet->balance = BigDecimal::of($wallet->balance)->plus($amount);
             $wallet->save();
+            wHook()->user()->setRelation('wallet', $wallet);
         });
 
         wHook()->api()->sendMessage([
@@ -129,6 +131,7 @@ class Wallet
 
             $wallet->balance = $amount;
             $wallet->save();
+            wHook()->user()->setRelation('wallet', $wallet);
         });
 
         wHook()->api()->sendMessage([
@@ -167,6 +170,7 @@ class Wallet
 
             $wallet->balance = $newBalance;
             $wallet->save();
+            wHook()->user()->setRelation('wallet', $wallet);
         });
     }
 }
