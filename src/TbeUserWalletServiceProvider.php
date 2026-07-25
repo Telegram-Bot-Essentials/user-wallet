@@ -14,10 +14,15 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Settings\DTOs\Setting;
 use TelegramBotEssentials\Settings\Enums\SettingType;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
+use TelegramBotEssentials\UserManagement\DTOs\UserSection;
+use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Services\BotUserSorts;
+use TelegramBotEssentials\UserManagement\Services\UserManagementSections;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
+use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Admin\AdminWalletQuery;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQuery;
+use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Admin\AdminWalletAnswer;
 use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member\MyWalletAnswer;
 
 class TbeUserWalletServiceProvider extends ServiceProvider
@@ -61,6 +66,8 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         $this->addSettings();
 
         $this->registerUserManagementSort();
+
+        $this->registerAdminWalletSection();
     }
 
     private function addSettings(): void
@@ -110,6 +117,31 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             },
             display: fn (BotUser $user) => currency()->priceFormat($user->wallet_balance ?? 0),
             active: fn () => (bool) settings()->get('billing.user_wallet.status'),
+        ));
+    }
+
+    private function registerAdminWalletSection(): void
+    {
+        if (! class_exists(UserManagementSections::class)) {
+            return;
+        }
+
+        callbackQueryBus()->addCallbackQueries([
+            AdminWalletQuery::class,
+        ]);
+
+        stateAnswerBus()->addStateAnswers([
+            AdminWalletAnswer::class,
+        ]);
+
+        app(UserManagementSections::class)->addSection(new UserSection(
+            key: 'wallet',
+            order: 10,
+            mode: SectionMode::BUTTON,
+            label: fn (BotUser $user) => __('tbe-user-wallet::admin_wallet.main.text.sectionLabel', [
+                'balance' => currency()->priceFormat($user->wallet->balance),
+            ]),
+            target: fn (BotUser $user) => encodeCallback(AdminWalletQuery::TYPE, 'adjust', [$user->id]),
         ));
     }
 
