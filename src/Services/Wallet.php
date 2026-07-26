@@ -37,6 +37,12 @@ class Wallet
             wHook()->user()->setRelation('wallet', $wallet);
         });
 
+        tbeLog('user-wallet')->info('Wallet debited', [
+            'wallet_id' => wHook()->user()->wallet->getKey(),
+            'amount' => (string) $amount,
+            'balance_after' => (string) wHook()->user()->wallet->balance,
+        ]);
+
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [
@@ -112,6 +118,12 @@ class Wallet
             wHook()->user()->setRelation('wallet', $wallet);
         });
 
+        tbeLog('user-wallet')->info('Wallet credited', [
+            'wallet_id' => wHook()->user()->wallet->getKey(),
+            'amount' => (string) $amount,
+            'balance_after' => (string) wHook()->user()->wallet->balance,
+        ]);
+
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-wallet::my_wallet.main.text.addAmountSuccess', [
@@ -133,6 +145,11 @@ class Wallet
             $wallet->save();
             wHook()->user()->setRelation('wallet', $wallet);
         });
+
+        tbeLog('user-wallet')->info('Wallet balance set', [
+            'wallet_id' => wHook()->user()->wallet->getKey(),
+            'balance_after' => (string) wHook()->user()->wallet->balance,
+        ]);
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
@@ -172,5 +189,12 @@ class Wallet
             $wallet->save();
             wHook()->user()->setRelation('wallet', $wallet);
         });
+
+        tbeLog('user-wallet')->info('Wallet balance adjusted by system', [
+            'wallet_id' => wHook()->user()->wallet->getKey(),
+            'amount' => (string) $amount,
+            'balance_after' => (string) wHook()->user()->wallet->balance,
+            'allow_negative' => $allowNegative,
+        ]);
     }
 }
