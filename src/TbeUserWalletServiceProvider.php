@@ -76,13 +76,15 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             key: 'billing.user_wallet',
             label: fn () => __('tbe-user-wallet::settings.labels.user_wallet'),
             type: SettingType::DIRECTORY,
+            description: fn () => __('tbe-user-wallet::settings.descriptions.user_wallet'),
         ));
 
         settings()->addSetting(new Setting(
             key: 'billing.user_wallet.status',
             label: fn () => __('tbe-user-wallet::settings.labels.status'),
             type: SettingType::CHECKBOX,
-            default: false
+            default: false,
+            description: fn () => __('tbe-user-wallet::settings.descriptions.status'),
         ));
     }
 
