@@ -15,9 +15,11 @@ use TelegramBotEssentials\Settings\DTOs\Setting;
 use TelegramBotEssentials\Settings\Enums\SettingType;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 use TelegramBotEssentials\UserManagement\DTOs\UserSection;
+use TelegramBotEssentials\UserManagement\DTOs\UserStat;
 use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Services\BotUserSorts;
 use TelegramBotEssentials\UserManagement\Services\UserManagementSections;
+use TelegramBotEssentials\UserManagement\Services\UserManagementStats;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Admin\AdminWalletQuery;
@@ -68,6 +70,38 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         $this->registerUserManagementSort();
 
         $this->registerAdminWalletSection();
+
+        $this->registerUserManagementStat();
+    }
+
+    /**
+     * The state of every wallet at once, for the header of the user list.
+     * Registered only when user-management is installed, which this package
+     * does not require.
+     */
+    private function registerUserManagementStat(): void
+    {
+        if (! class_exists(UserManagementStats::class)) {
+            return;
+        }
+
+        app(UserManagementStats::class)->addStat(new UserStat(
+            key: 'wallet',
+            order: 10,
+            content: function () {
+                $wallets = BotUserWallet::query()
+                    ->selectRaw('COALESCE(SUM(balance), 0) as total')
+                    ->selectRaw('SUM(CASE WHEN balance > 0 THEN 1 ELSE 0 END) as holders')
+                    ->toBase()
+                    ->first();
+
+                return __('tbe-user-wallet::bot_users.stats.wallet', [
+                    'total' => currency()->priceFormat($wallets->total),
+                    'holders' => number_format($wallets->holders ?? 0),
+                ]);
+            },
+            active: fn () => (bool) settings()->get('billing.user_wallet.status'),
+        ));
     }
 
     private function addSettings(): void

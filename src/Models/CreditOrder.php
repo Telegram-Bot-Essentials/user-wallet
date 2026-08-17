@@ -27,6 +27,11 @@ class CreditOrder extends Order
         'updated_at',
     ];
 
+    public static function statsLabel(): string
+    {
+        return __('tbe-user-wallet::credit_order.stats_label');
+    }
+
     public function getPaidAtAttribute(): ?Carbon
     {
         return $this->invoice?->paid_at;

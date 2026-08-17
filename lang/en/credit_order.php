@@ -9,4 +9,5 @@ return [
             'creditDecreased' => 'Your wallet balance decreased by :amount 💸 due to order cancellation',
         ],
     ],
+    'stats_label' => 'Wallet top-up',
 ];
