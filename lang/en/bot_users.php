@@ -5,6 +5,9 @@ return [
         'wallet_balance' => 'Wallet Balance',
     ],
     'stats' => [
-        'wallet' => '💰 Wallets: total :total | with a balance: :holders users',
+        'wallet' => '💰 Wallets'
+            ."\r\n"
+            ."Total balance: :total\r\n"
+            .'With a balance: :holders users',
     ],
 ];
