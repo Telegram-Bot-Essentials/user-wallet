@@ -10,15 +10,10 @@ use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class MyWalletKey extends ReplyKey
 {
-    protected string $text = '';
+    protected string $textKey = 'tbe-user-wallet::my_wallet.reply_key';
     protected int $perm = Roles::MEMBER->value;
-    protected string $response = '';
+    protected string $responseKey = 'tbe-user-wallet::my_wallet.main.answers.executedSuccess';
 
-    public function __construct()
-    {
-        $this->text = __('tbe-user-wallet::my_wallet.reply_key');
-        $this->response = __('tbe-user-wallet::my_wallet.main.answers.executedSuccess');
-    }
 
     /**
      * @throws TelegramSDKException
