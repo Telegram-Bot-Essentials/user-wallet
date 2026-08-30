@@ -12,6 +12,7 @@ class ByWalletAttempt extends PaymentAttempt
 {
     use BelongsToTenant;
     use HasMessageMeta;
+
     protected $guarded = [
         'id',
         'updated_at',
@@ -21,13 +22,15 @@ class ByWalletAttempt extends PaymentAttempt
 
     public function attempt(): void
     {
-        if($this->paymentAttempt->invoice->botUser->balance < $this->paymentAttempt->invoice->price) return;
+        if ($this->paymentAttempt->invoice->botUser->balance < $this->paymentAttempt->invoice->price) {
+            return;
+        }
         $this->paymentAttempt->invoice->botUser->balance -= $this->paymentAttempt->invoice->price;
         $this->paymentAttempt->invoice->botUser->save();
         $this->received_at = now();
         $this->save();
         $this->paymentAttempt->invoice->triggerInvoicePaidHook();
-        $this->paymentAttempt->invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.locks.user_payment.accepted'), customEmoji: "✅");
+        $this->paymentAttempt->invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.locks.user_payment.accepted'), customEmoji: '✅');
     }
 
     public function paymentAttempt(): BelongsTo

@@ -4,8 +4,8 @@ return [
     'by_wallet' => [
         'answers' => [
             'creditIsNotEnough' => '⛔️ Your wallet balance is not enough to pay this invoice.'
-                . "\r\nYour balance: :credit"
-                . "\r\nRequired: :neededCredit",
+                ."\r\nYour balance: :credit"
+                ."\r\nRequired: :neededCredit",
         ],
         'keys' => [
             'pay' => 'Pay with wallet 💰 - :price',

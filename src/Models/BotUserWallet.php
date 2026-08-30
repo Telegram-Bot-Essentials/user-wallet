@@ -5,13 +5,13 @@ namespace TelegramBotEssentials\UserWallet\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
-use Stancl\Tenancy\Database\TenantScope;
 use TelegramBotEssentials\Essence\Models\Bot;
 use TelegramBotEssentials\Essence\Models\BotUser;
 
 class BotUserWallet extends Model
 {
     use BelongsToTenant;
+
     protected $guarded = [
         'id',
         'created_at',
@@ -22,6 +22,7 @@ class BotUserWallet extends Model
     {
         return $this->belongsTo(BotUser::class);
     }
+
     public function bot(): BelongsTo
     {
         return $this->belongsTo(Bot::class);

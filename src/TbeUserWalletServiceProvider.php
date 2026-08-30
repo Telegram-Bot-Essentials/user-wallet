@@ -31,7 +31,7 @@ class TbeUserWalletServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(Wallet::class, fn() => new Wallet());
+        $this->app->singleton(Wallet::class, fn () => new Wallet);
 
     }
 
@@ -43,15 +43,15 @@ class TbeUserWalletServiceProvider extends ServiceProvider
     {
         $this->registerPublishing();
 
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-wallet');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-user-wallet');
 
         callbackQueryBus()->addCallbackQueries([
-            MyWalletQuery::class
+            MyWalletQuery::class,
         ]);
 
         stateAnswerBus()->addStateAnswers([
-            MyWalletAnswer::class
+            MyWalletAnswer::class,
         ]);
 
         BotUser::resolveRelationUsing('wallet', function (BotUser $model) {
@@ -126,7 +126,7 @@ class TbeUserWalletServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../lang' => resource_path('lang/vendor/tbe-user-wallet'),
+                __DIR__.'/../lang' => resource_path('lang/vendor/tbe-user-wallet'),
             ], 'tbe-user-wallet-translations');
         }
     }
@@ -187,17 +187,18 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             key: 'wallet',
             label: 'Wallet',
             inlineButtonGenerator: function (Invoice $invoice) {
-                if($invoice->payable instanceof CreditOrder){
+                if ($invoice->payable instanceof CreditOrder) {
                     return null;
                 }
-                if(!settings()->get('billing.user_wallet.status')){
+                if (! settings()->get('billing.user_wallet.status')) {
                     return null;
                 }
+
                 return Keyboard::inlineButton([
                     'text' => __('tbe-user-wallet::invoice.by_wallet.keys.pay', [
                         'price' => currency()->priceFormat($invoice->price),
                     ]),
-                    'callback_data' => encodeCallback('MYWALLET', 'byWallet', [$invoice->id])
+                    'callback_data' => encodeCallback('MYWALLET', 'byWallet', [$invoice->id]),
                 ]);
             }
         ));

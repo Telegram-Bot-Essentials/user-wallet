@@ -9,18 +9,19 @@ use Illuminate\Support\Facades\DB;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Billing\Models\Abstract\Order;
-use TelegramBotEssentials\Essence\Exceptions\LogicException;
-use TelegramBotEssentials\UserWallet\Telegram\Features\Member\MyWalletFeature;
 use TelegramBotEssentials\Billing\Traits\HasInvoice;
+use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Traits\HasMessageMeta;
+use TelegramBotEssentials\UserWallet\Telegram\Features\Member\MyWalletFeature;
 
 class CreditOrder extends Order
 {
     use BelongsToTenant;
-    use HasMessageMeta;
     use HasInvoice;
+    use HasMessageMeta;
 
     protected $appends = ['description', 'paid_at'];
+
     protected $guarded = [
         'id',
         'created_at',
@@ -45,7 +46,7 @@ class CreditOrder extends Order
     public function getDescriptionAttribute(): string
     {
         return __('tbe-user-wallet::credit_order.main.text.description', [
-            'price' => currency()->priceFormat($this->amount)
+            'price' => currency()->priceFormat($this->amount),
         ]);
     }
 

@@ -3,19 +3,18 @@
 namespace TelegramBotEssentials\UserWallet\Services;
 
 use Brick\Math\BigDecimal;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\DB;
+use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicExceptions\InsufficientBalanceException;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 
 class Wallet
 {
     /**
-     * @param BigDecimal|string $amount
      * @throws FeatureIsDisabled
      * @throws TbeLogicException
      * @throws TelegramSDKException
@@ -54,7 +53,7 @@ class Wallet
 
     private function validateAmount(BigDecimal|string &$amount): void
     {
-        if (!($amount instanceof BigDecimal)) {
+        if (! ($amount instanceof BigDecimal)) {
             $amount = BigDecimal::of($amount);
         }
     }
@@ -98,7 +97,6 @@ class Wallet
     }
 
     /**
-     * @param BigDecimal|string $amount
      * @throws FeatureIsDisabled
      * @throws TbeLogicException
      * @throws TelegramSDKException
@@ -178,7 +176,7 @@ class Wallet
             $wallet = $this->lockedWallet();
             $newBalance = BigDecimal::of($wallet->balance)->plus($amount);
 
-            if (!$allowNegative && $newBalance->isNegative()) {
+            if (! $allowNegative && $newBalance->isNegative()) {
                 throw new InsufficientBalanceException(__('tbe-user-wallet::invoice.by_wallet.answers.creditIsNotEnough', [
                     'credit' => currency()->priceFormat($wallet->balance),
                     'neededCredit' => currency()->priceFormat($amount->abs()),

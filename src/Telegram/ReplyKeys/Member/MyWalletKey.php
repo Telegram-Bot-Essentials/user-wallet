@@ -2,11 +2,11 @@
 
 namespace TelegramBotEssentials\UserWallet\Telegram\ReplyKeys\Member;
 
+use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
-use TelegramBotEssentials\UserWallet\Telegram\Features\Member\MyWalletFeature;
 use TelegramBotEssentials\Essence\Telegram\ReplyKeys\ReplyKey;
-use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBotEssentials\UserWallet\Telegram\Features\Member\MyWalletFeature;
 
 class MyWalletKey extends ReplyKey
 {

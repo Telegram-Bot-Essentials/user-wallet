@@ -10,16 +10,17 @@ use TelegramBotEssentials\Essence\Enums\AllowableFields;
 use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
-use TelegramBotEssentials\UserWallet\Models\CreditOrder;
-use TelegramBotEssentials\Essence\Models\MessageMeta;
 use TelegramBotEssentials\Essence\Telegram\StateAnswers\StateAnswer;
+use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 
 class MyWalletAnswer extends StateAnswer
 {
     protected string $type = 'MYWALLET';
+
     protected int $perm = Roles::MEMBER->value;
+
     protected array $allowedFields = [
-        AllowableFields::TEXT->value
+        AllowableFields::TEXT->value,
     ];
 
     /**
@@ -28,18 +29,18 @@ class MyWalletAnswer extends StateAnswer
      * @throws LogicException
      * @throws FeatureIsDisabled
      */
-    function addCredit(): void
+    public function addCredit(): void
     {
         dependsOn(settings()->get('billing.user_wallet.status'));
         $amount = wHook()->update()->message->text;
         Validator::validate(
             ['amount' => $amount],
-            ['amount' => "required|numeric|min:0.01|max:100000000"]
+            ['amount' => 'required|numeric|min:0.01|max:100000000']
         );
 
         $creditOrder = CreditOrder::create([
             'bot_user_id' => wHook()->user()->id,
-            'amount' => $amount
+            'amount' => $amount,
         ]);
 
         $invoice = billing()->createInvoice($creditOrder);
