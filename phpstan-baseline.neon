@@ -487,13 +487,13 @@ parameters:
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
 
 		-
-			message: '#^Cannot call method updateAndContinueAction\(\) on TelegramBotEssentials\\Essence\\Models\\MessageMeta\|null\.$#'
-			identifier: method.nonObject
+			message: '#^Parameter \#1 \$amount of method TelegramBotEssentials\\Billing\\Services\\Currency\:\:priceFormat\(\) expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
 
 		-
-			message: '#^Parameter \#1 \$amount of method TelegramBotEssentials\\Billing\\Services\\Currency\:\:priceFormat\(\) expects string, mixed given\.$#'
+			message: '#^Parameter \#1 \$data of method TelegramBotEssentials\\Essence\\Models\\MessageMeta\:\:updateAndContinueAction\(\) expects array\|TelegramBotEssentials\\Essence\\Telegram\\TelegramResponse, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
