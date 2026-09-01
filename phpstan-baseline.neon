@@ -145,7 +145,7 @@ parameters:
 			path: src/Models/CreditOrder.php
 
 		-
-			message: '#^Parameter \#1 \$value of static method Brick\\Math\\BigNumber\:\:of\(\) expects Brick\\Math\\BigNumber\|float\|int\|string, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of static method Brick\\Math\\BigNumber\:\:of\(\) expects Brick\\Math\\BigNumber\|int\|string, mixed given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/Models/CreditOrder.php
@@ -217,13 +217,13 @@ parameters:
 			path: src/Services/Wallet.php
 
 		-
-			message: '#^Parameter \#1 \$that of method Brick\\Math\\BigDecimal\:\:compareTo\(\) expects Brick\\Math\\BigNumber\|float\|int\|string, mixed given\.$#'
+			message: '#^Parameter \#1 \$that of method Brick\\Math\\BigDecimal\:\:compareTo\(\) expects Brick\\Math\\BigNumber\|int\|string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/Wallet.php
 
 		-
-			message: '#^Parameter \#1 \$value of static method Brick\\Math\\BigNumber\:\:of\(\) expects Brick\\Math\\BigNumber\|float\|int\|string, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of static method Brick\\Math\\BigNumber\:\:of\(\) expects Brick\\Math\\BigNumber\|int\|string, mixed given\.$#'
 			identifier: argument.type
 			count: 4
 			path: src/Services/Wallet.php
@@ -499,7 +499,7 @@ parameters:
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
 
 		-
-			message: '#^Parameter \#1 \$value of static method Brick\\Math\\BigNumber\:\:of\(\) expects Brick\\Math\\BigNumber\|float\|int\|string, string\|null given\.$#'
+			message: '#^Parameter \#1 \$value of static method Brick\\Math\\BigNumber\:\:of\(\) expects Brick\\Math\\BigNumber\|int\|string, string\|null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
