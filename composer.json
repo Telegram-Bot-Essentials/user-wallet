@@ -28,20 +28,6 @@
     "suggest": {
         "telegram-bot-essentials/user-management": "Adds wallet balance sorting to the bot users admin menu."
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Telegram-Bot-Essentials/essence"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/Telegram-Bot-Essentials/billing"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/Telegram-Bot-Essentials/settings"
-        }
-    ],
     "extra": {
         "laravel": {
             "providers": [
