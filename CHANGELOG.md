@@ -6,6 +6,14 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.24] - 2026-09-20
+
+### Fixed
+
+- A wallet top-up could be discounted with an offer code, letting a customer
+  buy credit for less than its face value. `CreditOrder::offersAllowed()`
+  overrides `tbe-billing`'s new hook to refuse one.
+
 ## [0.0.22] - 2026-09-01
 
 ### Changed
