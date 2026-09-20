@@ -50,6 +50,11 @@ class CreditOrder extends Order
         ]);
     }
 
+    public function offersAllowed(): bool
+    {
+        return false;
+    }
+
     /**
      * @throws BindingResolutionException
      * @throws TelegramSDKException
