@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.26] - 2026-09-25
+
 ### Fixed
 
 - Paying an invoice from the wallet is now atomic. The debit and the payment
