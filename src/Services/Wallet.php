@@ -6,11 +6,13 @@ use Brick\Math\BigDecimal;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\DB;
 use Telegram\Bot\Exceptions\TelegramSDKException;
+use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicExceptions\InsufficientBalanceException;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
+use TelegramBotEssentials\UserWallet\Models\ByWalletAttempt;
 
 class Wallet
 {
@@ -27,6 +29,45 @@ class Wallet
         $this->validateAmount($amount);
         $this->validateMethodAllowed();
 
+        $amount = BigDecimal::of($amount);
+        $this->debit($amount);
+        $this->notifyDebited($amount);
+    }
+
+    /**
+     * Pays an invoice from the wallet as one unit: the debit and the payment attempt
+     * are committed together or not at all, so a failure while recording the attempt
+     * can never leave the member debited with nothing paid. The "wallet debited"
+     * message is sent only after that commit, for the same reason.
+     *
+     * The caller marks the attempt succeeded (which pays the invoice) afterwards.
+     *
+     * @throws FeatureIsDisabled
+     * @throws InsufficientBalanceException
+     */
+    public function payInvoice(Invoice $invoice): ByWalletAttempt
+    {
+        $price = (string) $invoice->getAttribute('price');
+        $amount = BigDecimal::of($price);
+        $this->validateMethodAllowed();
+
+        $attempt = DB::transaction(function () use ($invoice, $amount, $price) {
+            $this->debit($amount);
+
+            $attempt = ByWalletAttempt::create(['amount' => $price]);
+            billing()->attemptPayment($invoice, $attempt);
+
+            return $attempt;
+        });
+
+        $this->notifyDebited($amount);
+
+        return $attempt;
+    }
+
+    /** The ledger part of a debit: checks the balance under a row lock and lowers it. */
+    private function debit(BigDecimal $amount): void
+    {
         DB::transaction(function () use ($amount) {
             $wallet = $this->lockedWallet();
             $this->validateBalanceIsSufficient($wallet, $amount);
@@ -41,7 +82,10 @@ class Wallet
             'amount' => (string) $amount,
             'balance_after' => (string) wHook()->user()->wallet->balance,
         ]);
+    }
 
+    private function notifyDebited(BigDecimal $amount): void
+    {
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [

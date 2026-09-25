@@ -11,7 +11,6 @@ use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
 use TelegramBotEssentials\Essence\Telegram\CallbackQueries\CallbackQuery;
-use TelegramBotEssentials\UserWallet\Models\ByWalletAttempt;
 
 class MyWalletQuery extends CallbackQuery
 {
@@ -50,13 +49,8 @@ class MyWalletQuery extends CallbackQuery
     public function byWallet(Invoice $invoice): void
     {
         dependsOn(settings()->get('billing.user_wallet.status'));
-        wallet()->takeAmount($invoice->price);
-
-        $byWalletAttempt = ByWalletAttempt::create([
-            'amount' => $invoice->price,
-        ]);
-
-        billing()->attemptPayment($invoice, $byWalletAttempt);
+        // The debit and the attempt commit together; only then is the invoice marked paid.
+        $byWalletAttempt = wallet()->payInvoice($invoice);
 
         $byWalletAttempt->attemptSucceed();
         $invoice->messageMeta->lockAction(__('tbe-user-wallet::invoice.locks.user_payment.accepted'), customEmoji: '✅');

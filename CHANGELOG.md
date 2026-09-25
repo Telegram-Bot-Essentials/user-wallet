@@ -6,6 +6,18 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Fixed
+
+- Paying an invoice from the wallet is now atomic. The debit and the payment
+  attempt are committed together (`Wallet::payInvoice()`), and the "wallet
+  debited" message is sent only after that commit. Before, the wallet was
+  debited first and the attempt recorded afterwards, so any failure in between
+  left the member charged with nothing paid.
+- Databases created before `by_wallet_attempts` gained `bot_id` and
+  `bot_user_id` (that migration was edited in place) get the columns from a new
+  migration; paying from the wallet failed on them with
+  `Unknown column 'bot_id'`. Existing attempts are filled in from their invoice.
+
 ## [0.0.25] - 2026-09-22
 
 ### Changed
