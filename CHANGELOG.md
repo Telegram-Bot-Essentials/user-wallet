@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.27] - 2026-09-27
+
 ### Changed
 
 - Requires essence `^0.15`, which fills the `{placeholders}` in these
