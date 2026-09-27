@@ -6,6 +6,14 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- Requires essence `^0.15`, which fills the `{placeholders}` in these
+  messages.
+- Wallet log messages carry the amount and resulting balance
+  (`Wallet credited 50000, balance now 120000`) instead of a bare
+  `Wallet credited`.
+
 ## [0.0.26] - 2026-09-25
 
 ### Fixed
