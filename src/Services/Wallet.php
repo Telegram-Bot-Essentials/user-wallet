@@ -77,7 +77,7 @@ class Wallet
             wHook()->user()->setRelation('wallet', $wallet);
         });
 
-        tbeLog('user-wallet')->info('Wallet debited', [
+        tbeLog('user-wallet')->info('Wallet debited {amount}, balance now {balance_after}', [
             'wallet_id' => wHook()->user()->wallet->getKey(),
             'amount' => (string) $amount,
             'balance_after' => (string) wHook()->user()->wallet->balance,
@@ -160,7 +160,7 @@ class Wallet
             wHook()->user()->setRelation('wallet', $wallet);
         });
 
-        tbeLog('user-wallet')->info('Wallet credited', [
+        tbeLog('user-wallet')->info('Wallet credited {amount}, balance now {balance_after}', [
             'wallet_id' => wHook()->user()->wallet->getKey(),
             'amount' => (string) $amount,
             'balance_after' => (string) wHook()->user()->wallet->balance,
@@ -188,7 +188,7 @@ class Wallet
             wHook()->user()->setRelation('wallet', $wallet);
         });
 
-        tbeLog('user-wallet')->info('Wallet balance set', [
+        tbeLog('user-wallet')->info('Wallet balance set to {balance_after}', [
             'wallet_id' => wHook()->user()->wallet->getKey(),
             'balance_after' => (string) wHook()->user()->wallet->balance,
         ]);
@@ -232,7 +232,7 @@ class Wallet
             wHook()->user()->setRelation('wallet', $wallet);
         });
 
-        tbeLog('user-wallet')->info('Wallet balance adjusted by system', [
+        tbeLog('user-wallet')->info('Wallet adjusted by the system by {amount}, balance now {balance_after}', [
             'wallet_id' => wHook()->user()->wallet->getKey(),
             'amount' => (string) $amount,
             'balance_after' => (string) wHook()->user()->wallet->balance,
