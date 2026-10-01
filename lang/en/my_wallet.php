@@ -4,13 +4,13 @@ return [
     'main' => [
         'text' => [
             'totalCredit' => '💸 Total balance: :price',
-            'enterCreditAmount' => 'Enter the amount you want to add to your wallet:',
+            'enterCreditAmount' => 'How much would you like to add to your wallet?',
             'takeAmountSuccess' => ':amount deducted from your wallet 💸',
             'addAmountSuccess' => ':amount added to your wallet 💸',
             'setAmountSuccess' => 'Your wallet balance is now :amount 💸',
         ],
         'answers' => [
-            'executedSuccess' => '💰 Wallet loaded.',
+            'executedSuccess' => '💰 Here\'s your wallet.',
         ],
         'keys' => [
             'addCredit' => 'Add credit 💲',

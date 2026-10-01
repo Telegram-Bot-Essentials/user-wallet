@@ -2,7 +2,7 @@
 
 return [
     'sorts' => [
-        'wallet_balance' => 'Wallet Balance',
+        'wallet_balance' => 'Wallet balance',
     ],
     'stats' => [
         'wallet' => '💰 Wallets'

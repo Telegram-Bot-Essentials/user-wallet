@@ -3,7 +3,7 @@
 return [
     'by_wallet' => [
         'answers' => [
-            'creditIsNotEnough' => '⛔️ Your wallet balance is not enough to pay this invoice.'
+            'creditIsNotEnough' => '⛔️ You don\'t have enough wallet balance to pay this invoice.'
                 ."\r\nYour balance: :credit"
                 ."\r\nRequired: :neededCredit",
         ],

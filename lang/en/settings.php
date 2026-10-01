@@ -2,8 +2,8 @@
 
 return [
     'labels' => [
-        'user_wallet' => 'User Wallet',
-        'status' => 'User Wallet Status',
+        'user_wallet' => 'User wallet',
+        'status' => 'User wallet status',
     ],
 
     'descriptions' => [
