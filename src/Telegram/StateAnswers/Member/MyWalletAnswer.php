@@ -42,7 +42,7 @@ class MyWalletAnswer extends StateAnswer
 
         $invoice = billing()->createInvoice($creditOrder);
 
-        wHook()->user()->changeState();
+        wHook()->conversation()->changeState();
 
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
