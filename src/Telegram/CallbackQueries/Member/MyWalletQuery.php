@@ -26,7 +26,7 @@ class MyWalletQuery extends CallbackQuery
         dependsOn(settings()->get('billing.user_wallet.status'));
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->deleteMessage();
-        wHook()->user()->changeState(encodeAnswerState($this->type, 'add_credit', [
+        wHook()->conversation()->changeState(encodeAnswerState($this->type, 'add_credit', [
             'message_meta' => $messageMeta->id,
         ]));
         wHook()->api()->sendMessage([
