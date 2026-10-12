@@ -91,7 +91,7 @@ class Wallet
             'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [
                 'amount' => currency()->priceFormat($amount),
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 
@@ -171,7 +171,7 @@ class Wallet
             'text' => __('tbe-user-wallet::my_wallet.main.text.addAmountSuccess', [
                 'amount' => currency()->priceFormat($amount),
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 
@@ -198,7 +198,7 @@ class Wallet
             'text' => __('tbe-user-wallet::my_wallet.main.text.setAmountSuccess', [
                 'amount' => currency()->priceFormat($amount),
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 
