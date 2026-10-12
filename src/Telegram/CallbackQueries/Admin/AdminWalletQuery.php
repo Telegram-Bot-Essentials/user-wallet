@@ -26,7 +26,7 @@ class AdminWalletQuery extends CallbackQuery
     {
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->lockAction(__('tbe-user-wallet::admin_wallet.main.text.waitingAmount'));
-        wHook()->user()->changeState(encodeAnswerState($this->type, 'adjust', [
+        wHook()->conversation()->changeState(encodeAnswerState($this->type, 'adjust', [
             'message_meta_id' => $messageMeta->id,
             'bot_user_id' => $botUser->id,
         ]));
