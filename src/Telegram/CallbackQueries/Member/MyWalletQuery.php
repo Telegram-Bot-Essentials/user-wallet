@@ -5,7 +5,6 @@ namespace TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Billing\Models\Invoice;
-use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
@@ -15,8 +14,6 @@ use TelegramBotEssentials\Essence\Telegram\CallbackQueries\CallbackQuery;
 class MyWalletQuery extends CallbackQuery
 {
     protected string $type = 'MYWALLET';
-
-    protected int $perm = Roles::MEMBER->value;
 
     /**
      * @throws TelegramSDKException
@@ -35,7 +32,7 @@ class MyWalletQuery extends CallbackQuery
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-wallet::my_wallet.main.text.enterCreditAmount'),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 
