@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Validator;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Billing\Telegram\Features\Member\InvoiceFeature;
 use TelegramBotEssentials\Essence\Enums\AllowableFields;
-use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\FeatureIsDisabled;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Telegram\StateAnswers\StateAnswer;
@@ -16,8 +15,6 @@ use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 class MyWalletAnswer extends StateAnswer
 {
     protected string $type = 'MYWALLET';
-
-    protected int $perm = Roles::MEMBER->value;
 
     protected array $allowedFields = [
         AllowableFields::TEXT->value,
@@ -52,7 +49,7 @@ class MyWalletAnswer extends StateAnswer
             'text' => __('tbe-user-wallet::credit_order.main.text.creatingInvoice', [
                 'amount' => currency()->priceFormat($amount),
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
 
         InvoiceFeature::invoice($invoice)->send();
