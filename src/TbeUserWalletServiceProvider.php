@@ -46,6 +46,8 @@ class TbeUserWalletServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-user-wallet');
 
+        permissionRegistry()->register('user-wallet.wallets.manage', fn () => __('tbe-user-wallet::permissions.wallets'), 'user-wallet');
+
         callbackQueryBus()->addCallbackQueries([
             MyWalletQuery::class,
         ]);
