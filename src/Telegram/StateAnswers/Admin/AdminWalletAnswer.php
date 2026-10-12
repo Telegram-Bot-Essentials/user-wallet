@@ -6,7 +6,6 @@ use Brick\Math\BigDecimal;
 use Illuminate\Support\Facades\Validator;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Essence\Enums\AllowableFields;
-use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicExceptions\InsufficientBalanceException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Telegram\StateAnswers\StateAnswer;
@@ -17,7 +16,7 @@ class AdminWalletAnswer extends StateAnswer
 {
     protected string $type = 'ADMINWALLET';
 
-    protected int $perm = Roles::ADMIN->value;
+    protected ?string $permission = 'user-wallet.wallets.manage';
 
     protected array $allowedFields = [
         AllowableFields::TEXT->value,
@@ -60,7 +59,7 @@ class AdminWalletAnswer extends StateAnswer
                 'amount' => currency()->priceFormat($amount),
                 'balance' => currency()->priceFormat($target->wallet->balance),
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
 
         $this->requireMessageMeta()->updateAndContinueAction($data);
