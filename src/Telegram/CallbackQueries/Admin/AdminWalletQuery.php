@@ -4,7 +4,6 @@ namespace TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Admin;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
-use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
@@ -16,7 +15,7 @@ class AdminWalletQuery extends CallbackQuery
 
     protected string $type = self::TYPE;
 
-    protected int $perm = Roles::ADMIN->value;
+    protected ?string $permission = 'user-wallet.wallets.manage';
 
     /**
      * @throws TelegramSDKException
@@ -36,7 +35,7 @@ class AdminWalletQuery extends CallbackQuery
             'text' => __('tbe-user-wallet::admin_wallet.main.text.enterAmount', [
                 'balance' => currency()->priceFormat($botUser->wallet->balance),
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 }
