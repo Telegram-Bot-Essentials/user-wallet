@@ -52,7 +52,7 @@ class AdminWalletAnswer extends StateAnswer
 
         $data = BotUsersFeature::show($target);
 
-        wHook()->user()->changeState();
+        wHook()->conversation()->changeState();
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-wallet::admin_wallet.main.text.adjustSuccess', [
