@@ -74,7 +74,7 @@ class CreditOrder extends Order
                 'text' => __('tbe-user-wallet::credit_order.main.text.creditIncreased', [
                     'amount' => currency()->priceFormat($this->amount),
                 ]),
-                'reply_markup' => wHook()->user()->getKeyboard(),
+                'reply_markup' => replyKeyboard(),
             ]);
             MyWalletFeature::main()->send();
         });
@@ -99,7 +99,7 @@ class CreditOrder extends Order
                 'text' => __('tbe-user-wallet::credit_order.main.text.creditDecreased', [
                     'amount' => currency()->priceFormat($this->amount),
                 ]),
-                'reply_markup' => wHook()->user()->getKeyboard(),
+                'reply_markup' => replyKeyboard(),
             ]);
             MyWalletFeature::main()->send();
         });
