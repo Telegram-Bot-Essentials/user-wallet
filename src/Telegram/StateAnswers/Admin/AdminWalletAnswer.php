@@ -16,7 +16,7 @@ class AdminWalletAnswer extends StateAnswer
 {
     protected string $type = 'ADMINWALLET';
 
-    protected ?string $permission = 'user-wallet.wallets.manage';
+    protected ?string $ability = 'user-wallet.wallets.manage';
 
     protected array $allowedFields = [
         AllowableFields::TEXT->value,
