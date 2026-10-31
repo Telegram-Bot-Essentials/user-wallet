@@ -15,7 +15,7 @@ class AdminWalletQuery extends CallbackQuery
 
     protected string $type = self::TYPE;
 
-    protected ?string $permission = 'user-wallet.wallets.manage';
+    protected ?string $ability = 'user-wallet.wallets.manage';
 
     /**
      * @throws TelegramSDKException
