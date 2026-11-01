@@ -34,9 +34,4 @@ class MyWalletCommand extends Command
 
         return true;
     }
-
-    public function isEnabled(): bool
-    {
-        return (bool) settings()->get('billing.user_wallet.status');
-    }
 }
