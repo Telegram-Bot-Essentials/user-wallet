@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.35] - 2026-11-01
+
 ### Added
 
 - `/wallet`, for groups too. Groups have no reply keyboard, so it stands in for
