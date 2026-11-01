@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use TelegramBotEssentials\Essence\Support\BotCommandMenu;
 use TelegramBotEssentials\Essence\Telegram\Commands\Command;
 
 const WALLET_GROUP = -100444;
@@ -63,4 +64,14 @@ it('ignores other deep links', function () {
     $this->postWebhookUpdate($this->bot, $this->makeMessageUpdate('/start CODE123', 3001))->assertOk();
 
     Http::assertNotSent(fn ($request) => str_ends_with($request->url(), '/sendMessage'));
+});
+
+it('publishes the menu outside a webhook', function () {
+    wHook()->clear();
+    app(BotCommandMenu::class)->register($this->bot);
+
+    $this->assertTelegramSent(function ($request) {
+        return str_ends_with($request->url(), '/setMyCommands')
+            && in_array('wallet', array_column(json_decode((string) $request['commands'], true), 'command'), true);
+    });
 });
