@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'command_description' => 'Open your wallet',
     'main' => [
         'text' => [
             'totalCredit' => '💸 Total balance: :price',
