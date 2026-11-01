@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'command_description' => 'کیف پول من',
     'main' => [
         'text' => [
             'totalCredit' => '💸 موجودی کل: :price',
