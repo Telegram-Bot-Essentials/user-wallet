@@ -6,6 +6,12 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- `/wallet`, for groups too. Groups have no reply keyboard, so it stands in for
+  the wallet key there, and answers with a link to the private chat rather
+  than show a balance. Needs essence's `continueInPrivate()`.
+
 ## [0.0.34] - 2026-11-01
 
 ### Added
