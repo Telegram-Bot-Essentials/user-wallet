@@ -4,11 +4,13 @@ namespace TelegramBotEssentials\UserWallet;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Telegram\Bot\Keyboard\Keyboard;
 use TelegramBotEssentials\Billing\DTOs\Gateway;
 use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Billing\Services\Gateways\Wallet;
+use TelegramBotEssentials\Essence\Events\BotDeepLinkReceived;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Settings\DTOs\Setting;
@@ -20,10 +22,12 @@ use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Services\BotUserSorts;
 use TelegramBotEssentials\UserManagement\Services\UserManagementSections;
 use TelegramBotEssentials\UserManagement\Services\UserManagementStats;
+use TelegramBotEssentials\UserWallet\Listeners\OpenWalletFromDeepLink;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\CreditOrder;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Admin\AdminWalletQuery;
 use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQuery;
+use TelegramBotEssentials\UserWallet\Telegram\Commands\Member\MyWalletCommand;
 use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Admin\AdminWalletAnswer;
 use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member\MyWalletAnswer;
 
@@ -45,6 +49,12 @@ class TbeUserWalletServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-user-wallet');
+
+        commandBus()->addCommands([
+            MyWalletCommand::class,
+        ]);
+
+        Event::listen(BotDeepLinkReceived::class, OpenWalletFromDeepLink::class);
 
         callbackQueryBus()->addCallbackQueries([
             MyWalletQuery::class,
