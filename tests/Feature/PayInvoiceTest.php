@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Brick\Math\BigDecimal;
+use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use TelegramBotEssentials\Billing\Models\Invoice;
@@ -31,6 +32,15 @@ beforeEach(function () {
         'original_price' => '500',
     ]);
 });
+
+function telegramRefuses(int $code, string $description): void
+{
+    // A fresh factory: the base TestCase already registered a catch-all fake,
+    // and stubs registered first win.
+    $factory = new Factory;
+    $factory->fake(['*' => Http::response(['ok' => false, 'error_code' => $code, 'description' => $description], $code)]);
+    Http::swap($factory);
+}
 
 function debitedMessages(): int
 {
@@ -84,4 +94,24 @@ it('still debits and messages through takeAmount as before', function () {
 
     expect(balance())->toBe(700)
         ->and(debitedMessages())->toBe(1);
+});
+
+it('still hands back the attempt when telegram cannot deliver the debit notice', function () {
+    telegramRefuses(403, 'Forbidden: bot was blocked by the user');
+
+    // The money has moved: the caller must get the attempt, or the member is
+    // charged for an invoice nothing will ever mark paid.
+    $attempt = app(Wallet::class)->payInvoice($this->invoice);
+
+    expect(balance())->toBe(500)
+        ->and($attempt)->toBeInstanceOf(ByWalletAttempt::class)
+        ->and($this->invoice->fresh()->payment_attempt_id)->toBe($attempt->id);
+});
+
+it('keeps a direct debit when telegram cannot deliver the notice', function () {
+    telegramRefuses(500, 'Internal Server Error');
+
+    app(Wallet::class)->takeAmount('200');
+
+    expect(balance())->toBe(800);
 });
