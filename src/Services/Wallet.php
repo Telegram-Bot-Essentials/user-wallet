@@ -13,6 +13,7 @@ use TelegramBotEssentials\Essence\Exceptions\TbeLogicException;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicExceptions\InsufficientBalanceException;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Models\ByWalletAttempt;
+use Throwable;
 
 class Wallet
 {
@@ -84,15 +85,26 @@ class Wallet
         ]);
     }
 
+    /**
+     * The debit has committed by now. A message that cannot be delivered must
+     * not throw past the caller, which still has to mark the invoice paid.
+     */
     private function notifyDebited(BigDecimal $amount): void
     {
-        wHook()->api()->sendMessage([
-            'chat_id' => wHook()->user()->telegramUser->peer_id,
-            'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [
-                'amount' => currency()->priceFormat($amount),
-            ]),
-            'reply_markup' => replyKeyboard(),
-        ]);
+        try {
+            wHook()->api()->sendMessage([
+                'chat_id' => wHook()->user()->telegramUser->peer_id,
+                'text' => __('tbe-user-wallet::my_wallet.main.text.takeAmountSuccess', [
+                    'amount' => currency()->priceFormat($amount),
+                ]),
+                'reply_markup' => replyKeyboard(),
+            ]);
+        } catch (Throwable $e) {
+            tbeLog('user-wallet')->warning('Could not tell the member about a debit of {amount}: '.$e->getMessage(), [
+                'amount' => (string) $amount,
+                'exception' => $e,
+            ]);
+        }
     }
 
     private function validateAmount(BigDecimal|string &$amount): void
