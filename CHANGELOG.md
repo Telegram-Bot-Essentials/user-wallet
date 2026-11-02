@@ -6,6 +6,10 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Fixed
+
+- A debit notice Telegram cannot deliver no longer stops a wallet payment. `payInvoice()` used to throw after the debit committed, leaving the member charged and the invoice unpaid.
+
 ## [0.0.35] - 2026-11-01
 
 ### Added
