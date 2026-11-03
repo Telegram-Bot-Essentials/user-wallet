@@ -6,6 +6,12 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Fixed
+
+- A top-up or its reversal no longer reports an error when Telegram cannot
+  deliver the notice, since the balance has already moved. Needs essence with
+  `notifyUser()`.
+
 ## [0.0.36] - 2026-11-02
 
 ### Fixed
