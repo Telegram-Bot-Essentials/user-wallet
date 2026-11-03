@@ -69,14 +69,11 @@ class CreditOrder extends Order
                 $wallet->save();
                 wHook()->user()->setRelation('wallet', $wallet);
             });
-            wHook()->api()->sendMessage([
-                'chat_id' => wHook()->user()->telegramUser->peer_id,
-                'text' => __('tbe-user-wallet::credit_order.main.text.creditIncreased', [
-                    'amount' => currency()->priceFormat($this->amount),
-                ]),
-                'reply_markup' => replyKeyboard(),
-            ]);
-            MyWalletFeature::main()->send();
+            // The balance has moved: being told is not part of that.
+            notifyUser(wHook()->user(), __('tbe-user-wallet::credit_order.main.text.creditIncreased', [
+                'amount' => currency()->priceFormat($this->amount),
+            ]));
+            isolated('show wallet after credit order #'.$this->getKey(), fn () => MyWalletFeature::main()->send());
         });
     }
 
@@ -94,14 +91,11 @@ class CreditOrder extends Order
                 $wallet->save();
                 wHook()->user()->setRelation('wallet', $wallet);
             });
-            wHook()->api()->sendMessage([
-                'chat_id' => wHook()->user()->telegramUser->peer_id,
-                'text' => __('tbe-user-wallet::credit_order.main.text.creditDecreased', [
-                    'amount' => currency()->priceFormat($this->amount),
-                ]),
-                'reply_markup' => replyKeyboard(),
-            ]);
-            MyWalletFeature::main()->send();
+            // The balance has moved: being told is not part of that.
+            notifyUser(wHook()->user(), __('tbe-user-wallet::credit_order.main.text.creditDecreased', [
+                'amount' => currency()->priceFormat($this->amount),
+            ]));
+            isolated('show wallet after credit order #'.$this->getKey(), fn () => MyWalletFeature::main()->send());
         });
     }
 
