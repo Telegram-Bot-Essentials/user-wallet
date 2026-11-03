@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.37] - 2026-11-03
+
 ### Fixed
 
 - A top-up or its reversal no longer reports an error when Telegram cannot
