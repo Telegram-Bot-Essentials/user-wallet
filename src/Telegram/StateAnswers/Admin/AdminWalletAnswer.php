@@ -9,8 +9,8 @@ use TelegramBotEssentials\Essence\Enums\AllowableFields;
 use TelegramBotEssentials\Essence\Exceptions\TbeLogicExceptions\InsufficientBalanceException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Telegram\StateAnswers\StateAnswer;
-use TelegramBotEssentials\UserManagement\Models\BotUserAction;
 use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
+use TelegramBotEssentials\UserWallet\Services\WalletAdjustments;
 
 class AdminWalletAnswer extends StateAnswer
 {
@@ -37,18 +37,8 @@ class AdminWalletAnswer extends StateAnswer
 
         $target = BotUser::query()->findOrFail($bot_user_id);
         $amount = BigDecimal::of($amount);
-        $admin = wHook()->user();
 
-        wHook()->runForUser($target, fn () => wallet()->adjustBalance($amount, allowNegative: true));
-
-        BotUserAction::create([
-            'bot_user_id' => $target->id,
-            'update_type' => 'admin_wallet_adjustment',
-            'action' => __('tbe-user-wallet::admin_wallet.main.text.auditEntry', [
-                'admin' => $admin->telegramUser->username ? '@'.$admin->telegramUser->username : $admin->telegramUser->full_name,
-                'amount' => currency()->priceFormat($amount),
-            ]),
-        ]);
+        app(WalletAdjustments::class)->adjust($target, $amount, wHook()->user());
 
         $data = BotUsersFeature::show($target);
 
