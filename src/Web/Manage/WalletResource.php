@@ -12,6 +12,7 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Models\TelegramUser;
 use TelegramBotEssentials\Essence\Web\Filament\PanelResource;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
+use TelegramBotEssentials\UserWallet\Web\Widgets\WalletStats;
 
 /** Members' wallets: what each holds, adjusted by hand as in the bot's profile. */
 class WalletResource extends PanelResource
@@ -85,6 +86,11 @@ class WalletResource extends PanelResource
         $balance = $wallet->getAttribute('balance');
 
         return is_numeric($balance) && (float) $balance < 0;
+    }
+
+    public static function getWidgets(): array
+    {
+        return [WalletStats::class];
     }
 
     public static function getPages(): array
