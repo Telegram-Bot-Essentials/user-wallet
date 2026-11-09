@@ -5,6 +5,7 @@ namespace TelegramBotEssentials\UserWallet\Web;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use TelegramBotEssentials\UserWallet\Web\Manage\WalletResource;
+use TelegramBotEssentials\UserWallet\Web\Widgets\WalletStats;
 
 class UserWalletManagePlugin implements Plugin
 {
@@ -16,6 +17,7 @@ class UserWalletManagePlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel->resources([WalletResource::class]);
+        $panel->widgets([WalletStats::class]);
     }
 
     public function boot(Panel $panel): void {}
