@@ -1,13 +1,19 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Method TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:bot\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
-			identifier: missingType.generics
+			message: '#^Cannot call method create\(\) on mixed\.$#'
+			identifier: method.nonObject
 			count: 1
-			path: src/Models/BotUserWallet.php
+			path: src/Services/WalletAdjustments.php
 
 		-
-			message: '#^Method TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:user\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			message: '#^Class TelegramBotEssentials\\UserManagement\\DTOs\\UserSection not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/TbeUserWalletServiceProvider.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:bot\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
 			path: src/Models/BotUserWallet.php
@@ -237,23 +243,11 @@ parameters:
 		-
 			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$wallet\.$#'
 			identifier: property.notFound
-			count: 1
+			count: 2
 			path: src/TbeUserWalletServiceProvider.php
 
 		-
 			message: '#^Access to an undefined property TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:\$balance\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
-			message: '#^Access to an undefined property TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:\$bot_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
-			message: '#^Access to an undefined property TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:\$bot_user_id\.$#'
 			identifier: property.notFound
 			count: 1
 			path: src/TbeUserWalletServiceProvider.php
@@ -427,18 +421,6 @@ parameters:
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
 
 		-
-			message: '#^Binary operation "\." between ''@'' and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
-
-		-
-			message: '#^Call to static method create\(\) on an unknown class TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
-
-		-
 			message: '#^Call to static method show\(\) on an unknown class TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\.$#'
 			identifier: class.notFound
 			count: 1
@@ -446,12 +428,6 @@ parameters:
 
 		-
 			message: '#^Cannot access property \$balance on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
-
-		-
-			message: '#^Cannot access property \$full_name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
 			identifier: property.nonObject
 			count: 1
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
@@ -469,12 +445,6 @@ parameters:
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
 
 		-
-			message: '#^Cannot access property \$username on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
-			identifier: property.nonObject
-			count: 2
-			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
-
-		-
 			message: '#^Parameter \#1 \$amount of method TelegramBotEssentials\\Billing\\Services\\Currency\:\:priceFormat\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
@@ -488,12 +458,6 @@ parameters:
 
 		-
 			message: '#^Parameter \#1 \$value of static method Brick\\Math\\BigNumber\:\:of\(\) expects Brick\\Math\\BigNumber\|int\|string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
-
-		-
-			message: '#^Parameter \#2 \$replace of function __ expects array\<string, bool\|\(Closure\(string\)\: string\)\|float\|int\|string\|null\>, array\{admin\: mixed, amount\: string\} given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
