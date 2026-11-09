@@ -8,6 +8,7 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Web\WebAccounts;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Web\Manage\ViewWallet;
+use TelegramBotEssentials\UserWallet\Web\Widgets\WalletStats;
 
 function walletOf(BotUser $user, string $balance): BotUserWallet
 {
@@ -35,6 +36,7 @@ it('lists this bot\'s wallets with a balance', function () {
         ->assertOk()
         ->assertSee('@saver')
         ->assertSee(currency()->priceFormat('25000'))
+        ->assertSee(__('tbe-user-wallet::web.stats.total'))
         ->assertDontSee('@outsider');
 });
 
@@ -86,4 +88,11 @@ it('refuses wallet updates once signed out', function () {
 
     $this->livewireRequest($this->url.'/'.$wallet->id, 'ViewWallet', 'mountAction', ['adjust'],
         fn () => Auth::guard(WebAccounts::guard())->logout())->assertUnauthorized();
+});
+
+it('hides the wallet cards from who may not manage wallets', function () {
+    $limited = $this->grant($this->makeBotUser($this->bot, 9604), 'web.manage');
+    $this->enterPanel('manage', $this->bot, $this->panelAccount($limited));
+
+    expect(WalletStats::canView())->toBeFalse();
 });
