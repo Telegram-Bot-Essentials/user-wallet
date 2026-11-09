@@ -7,7 +7,6 @@ return [
     'balance' => 'Balance',
     'changed' => 'Changed',
     'with_balance' => 'With a balance',
-    'totals' => 'Total balance :total · :holders members with a balance',
     'adjust' => 'Adjust balance',
     'adjust_help' => 'Current balance: :balance. Enter an amount to add; use a minus sign to deduct.',
     'amount' => 'Amount',
@@ -16,4 +15,11 @@ return [
     'no_top_ups' => 'No top-ups yet.',
     'payments' => 'Paid from the wallet',
     'no_payments' => 'Nothing paid from the wallet yet.',
+    'stats' => [
+        'total' => 'Held in wallets',
+        'holders' => ':count members with a balance',
+        'top_ups' => 'Topped up',
+        'last_30' => 'Last 30 days',
+        'negative' => 'Below zero',
+    ],
 ];
