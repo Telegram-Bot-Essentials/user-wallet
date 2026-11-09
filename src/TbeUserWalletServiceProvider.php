@@ -30,6 +30,8 @@ use TelegramBotEssentials\UserWallet\Telegram\CallbackQueries\Member\MyWalletQue
 use TelegramBotEssentials\UserWallet\Telegram\Commands\Member\MyWalletCommand;
 use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Admin\AdminWalletAnswer;
 use TelegramBotEssentials\UserWallet\Telegram\StateAnswers\Member\MyWalletAnswer;
+use TelegramBotEssentials\UserWallet\Web\Manage\WalletResource;
+use TelegramBotEssentials\UserWallet\Web\UserWalletManagePlugin;
 
 class TbeUserWalletServiceProvider extends ServiceProvider
 {
@@ -37,6 +39,8 @@ class TbeUserWalletServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Wallet::class, fn () => new Wallet);
 
+        // Class names only: Filament is loaded only where the app installed it.
+        webPanels()->manage(UserWalletManagePlugin::class);
     }
 
     /**
@@ -49,6 +53,7 @@ class TbeUserWalletServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-user-wallet');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'tbe-user-wallet');
 
         commandBus()->addCommands([
             MyWalletCommand::class,
@@ -180,7 +185,13 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             AdminWalletAnswer::class,
         ]);
 
+        // user-management before webUrl has no such parameter: pass it only when it exists.
+        $web = property_exists(UserSection::class, 'webUrl')
+            ? ['webUrl' => fn (BotUser $user): string => WalletResource::getUrl('view', ['record' => $user->wallet])]
+            : [];
+
         app(UserManagementSections::class)->addSection(new UserSection(
+            ...$web,
             key: 'wallet',
             order: 10,
             mode: SectionMode::BUTTON,
