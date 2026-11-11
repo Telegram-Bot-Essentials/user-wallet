@@ -25,4 +25,5 @@ return [
     'empty' => [
         'wallets' => 'No wallets yet',
     ],
+    'statuses' => ['paid' => 'Paid', 'succeed' => 'Paid', 'pending' => 'Pending', 'failed' => 'Failed'],
 ];

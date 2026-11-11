@@ -66,6 +66,21 @@ class ViewWallet extends Page
         return currency()->priceFormat(is_numeric($amount) ? (string) $amount : '0');
     }
 
+    /** An invoice's or a payment's state in words, instead of its stored value. */
+    public function statusLabel(?string $status): string
+    {
+        return (string) __('tbe-user-wallet::web.statuses.'.($status ?? 'pending'));
+    }
+
+    public function statusColor(?string $status): string
+    {
+        return match ($status) {
+            'paid', 'succeed' => 'success',
+            'failed' => 'danger',
+            default => 'warning',
+        };
+    }
+
     /** @return array<Action> */
     protected function getHeaderActions(): array
     {

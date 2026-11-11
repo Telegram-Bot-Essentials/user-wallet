@@ -25,4 +25,5 @@ return [
     'empty' => [
         'wallets' => 'هنوز کیف پولی نیست',
     ],
+    'statuses' => ['paid' => 'پرداخت‌شده', 'succeed' => 'پرداخت‌شده', 'pending' => 'در انتظار', 'failed' => 'ناموفق'],
 ];
