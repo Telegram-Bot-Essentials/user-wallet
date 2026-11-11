@@ -1,18 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Cannot call method create\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Services/WalletAdjustments.php
-
-		-
-			message: '#^Class TelegramBotEssentials\\UserManagement\\DTOs\\UserSection not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
 			message: '#^Method TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:bot\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
@@ -235,12 +223,6 @@ parameters:
 			path: src/Services/Wallet.php
 
 		-
-			message: '#^Access to an undefined property TelegramBotEssentials\\Billing\\Models\\Invoice\:\:\$price\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
 			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$wallet\.$#'
 			identifier: property.notFound
 			count: 2
@@ -249,12 +231,6 @@ parameters:
 		-
 			message: '#^Access to an undefined property TelegramBotEssentials\\UserWallet\\Models\\BotUserWallet\:\:\$balance\.$#'
 			identifier: property.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
-			message: '#^Access to constant BUTTON on an unknown class TelegramBotEssentials\\UserManagement\\Enums\\SectionMode\.$#'
-			identifier: class.notFound
 			count: 1
 			path: src/TbeUserWalletServiceProvider.php
 
@@ -313,27 +289,9 @@ parameters:
 			path: src/TbeUserWalletServiceProvider.php
 
 		-
-			message: '#^Instantiated class TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
-			message: '#^Instantiated class TelegramBotEssentials\\UserManagement\\DTOs\\UserSection not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
-			message: '#^Instantiated class TelegramBotEssentials\\UserManagement\\DTOs\\UserStat not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/TbeUserWalletServiceProvider.php
-
-		-
 			message: '#^Parameter \#1 \$amount of method TelegramBotEssentials\\Billing\\Services\\Currency\:\:priceFormat\(\) expects string, mixed given\.$#'
 			identifier: argument.type
-			count: 4
+			count: 3
 			path: src/TbeUserWalletServiceProvider.php
 
 		-
@@ -421,12 +379,6 @@ parameters:
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
 
 		-
-			message: '#^Call to static method show\(\) on an unknown class TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
-
-		-
 			message: '#^Cannot access property \$balance on mixed\.$#'
 			identifier: property.nonObject
 			count: 1
@@ -446,12 +398,6 @@ parameters:
 
 		-
 			message: '#^Parameter \#1 \$amount of method TelegramBotEssentials\\Billing\\Services\\Currency\:\:priceFormat\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
-
-		-
-			message: '#^Parameter \#1 \$data of method TelegramBotEssentials\\Essence\\Models\\MessageMeta\:\:updateAndContinueAction\(\) expects array\|TelegramBotEssentials\\Essence\\Telegram\\TelegramResponse, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Telegram/StateAnswers/Admin/AdminWalletAnswer.php
