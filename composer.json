@@ -43,6 +43,9 @@
         "pestphp/pest": "^3.7 || ^4.0",
         "pestphp/pest-plugin-laravel": "^3.1 || ^4.0"
     },
+    "conflict": {
+        "telegram-bot-essentials/user-management": "<0.0.30"
+    },
     "autoload-dev": {
         "psr-4": {
             "TelegramBotEssentials\\UserWallet\\Tests\\": "tests/",

@@ -187,27 +187,18 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             AdminWalletAnswer::class,
         ]);
 
-        // user-management before summaries takes the bot's wording only: hand it the old label then.
-        $shown = property_exists(UserSection::class, 'summary')
-            ? [
-                'summary' => fn (BotUser $user): SectionSummary => new SectionSummary(
-                    title: __('tbe-user-wallet::admin_wallet.main.text.sectionTitle'),
-                    value: currency()->priceFormat($user->wallet->balance),
-                    emoji: '💰',
-                    icon: Heroicon::OutlinedWallet,
-                ),
-                'webUrl' => fn (BotUser $user): string => WalletResource::getUrl('view', ['record' => $user->wallet]),
-            ]
-            : ['label' => fn (BotUser $user) => __('tbe-user-wallet::admin_wallet.main.text.sectionLabel', [
-                'balance' => currency()->priceFormat($user->wallet->balance),
-            ])];
-
         app(UserManagementSections::class)->addSection(new UserSection(
-            ...$shown,
             key: 'wallet',
             order: 10,
             mode: SectionMode::BUTTON,
             target: fn (BotUser $user) => encodeCallback(AdminWalletQuery::TYPE, 'adjust', [$user->id]),
+            summary: fn (BotUser $user): SectionSummary => new SectionSummary(
+                title: __('tbe-user-wallet::admin_wallet.main.text.sectionTitle'),
+                value: currency()->priceFormat($user->wallet->balance),
+                emoji: '💰',
+                icon: Heroicon::OutlinedWallet,
+            ),
+            webUrl: fn (BotUser $user): string => WalletResource::getUrl('view', ['record' => $user->wallet]),
         ));
     }
 
