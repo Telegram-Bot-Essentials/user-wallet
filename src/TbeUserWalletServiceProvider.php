@@ -2,6 +2,7 @@
 
 namespace TelegramBotEssentials\UserWallet;
 
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -16,6 +17,7 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Settings\DTOs\Setting;
 use TelegramBotEssentials\Settings\Enums\SettingType;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
+use TelegramBotEssentials\UserManagement\DTOs\SectionSummary;
 use TelegramBotEssentials\UserManagement\DTOs\UserSection;
 use TelegramBotEssentials\UserManagement\DTOs\UserStat;
 use TelegramBotEssentials\UserManagement\Enums\SectionMode;
@@ -185,19 +187,26 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             AdminWalletAnswer::class,
         ]);
 
-        // user-management before webUrl has no such parameter: pass it only when it exists.
-        $web = property_exists(UserSection::class, 'webUrl')
-            ? ['webUrl' => fn (BotUser $user): string => WalletResource::getUrl('view', ['record' => $user->wallet])]
-            : [];
+        // user-management before summaries takes the bot's wording only: hand it the old label then.
+        $shown = property_exists(UserSection::class, 'summary')
+            ? [
+                'summary' => fn (BotUser $user): SectionSummary => new SectionSummary(
+                    title: __('tbe-user-wallet::admin_wallet.main.text.sectionTitle'),
+                    value: currency()->priceFormat($user->wallet->balance),
+                    emoji: '💰',
+                    icon: Heroicon::OutlinedWallet,
+                ),
+                'webUrl' => fn (BotUser $user): string => WalletResource::getUrl('view', ['record' => $user->wallet]),
+            ]
+            : ['label' => fn (BotUser $user) => __('tbe-user-wallet::admin_wallet.main.text.sectionLabel', [
+                'balance' => currency()->priceFormat($user->wallet->balance),
+            ])];
 
         app(UserManagementSections::class)->addSection(new UserSection(
-            ...$web,
+            ...$shown,
             key: 'wallet',
             order: 10,
             mode: SectionMode::BUTTON,
-            label: fn (BotUser $user) => __('tbe-user-wallet::admin_wallet.main.text.sectionLabel', [
-                'balance' => currency()->priceFormat($user->wallet->balance),
-            ]),
             target: fn (BotUser $user) => encodeCallback(AdminWalletQuery::TYPE, 'adjust', [$user->id]),
         ));
     }
