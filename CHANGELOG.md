@@ -6,6 +6,39 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.38] - 2026-11-11
+
+### Added
+
+- List wallets and adjust one by hand.
+- Add the wallets panel plugin.
+- Add the wallet view.
+- Register the plugin and link the profile's wallet.
+- Translate the screens to english.
+- Translate the screens to persian.
+- Show wallets as cards with a top-up sparkline.
+- Put the wallet cards above the list.
+- Add the wallet cards to the dashboard.
+- Translate the cards to english.
+- Translate the cards to persian.
+- Add the plain profile section title.
+- Add the persian profile section title.
+- Give the profile section as a summary.
+- Add empty-list messages.
+- Group, date and tidy the panel screens.
+- Name wallet payment states instead of showing raw values.
+- Build the wallet page from the shared components.
+
+### Changed
+
+- Move hand adjustments into a service.
+- Adjust from the bot through the service.
+- Hand user-management the wallet summary directly.
+
+### Fixed
+
+- Read a wallet's member from bot_user_id.
+
 ## [0.0.37] - 2026-11-03
 
 ### Fixed
