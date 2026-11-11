@@ -22,4 +22,7 @@ return [
         'last_30' => 'Last 30 days',
         'negative' => 'Below zero',
     ],
+    'empty' => [
+        'wallets' => 'No wallets yet',
+    ],
 ];
