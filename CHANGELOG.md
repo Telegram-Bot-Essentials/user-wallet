@@ -31,6 +31,7 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ### Changed
 
+- Conflict with user-management before 0.0.30.
 - Move hand adjustments into a service.
 - Adjust from the bot through the service.
 - Hand user-management the wallet summary directly.
