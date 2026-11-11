@@ -8,11 +8,13 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use TelegramBotEssentials\Essence\Models\BotUser;
-use TelegramBotEssentials\Essence\Models\TelegramUser;
+use TelegramBotEssentials\Essence\Web\Filament\PanelDates;
+use TelegramBotEssentials\Essence\Web\Filament\PanelGroup;
+use TelegramBotEssentials\Essence\Web\Filament\PanelMembers;
 use TelegramBotEssentials\Essence\Web\Filament\PanelResource;
 use TelegramBotEssentials\UserWallet\Models\BotUserWallet;
 use TelegramBotEssentials\UserWallet\Web\Widgets\WalletStats;
+use UnitEnum;
 
 /** Members' wallets: what each holds, adjusted by hand as in the bot's profile. */
 class WalletResource extends PanelResource
@@ -26,6 +28,8 @@ class WalletResource extends PanelResource
     protected static ?string $tenantOwnershipRelationshipName = 'bot';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedWallet;
+
+    protected static string|UnitEnum|null $navigationGroup = PanelGroup::Members;
 
     public static function getNavigationLabel(): string
     {
@@ -59,7 +63,7 @@ class WalletResource extends PanelResource
                     ->formatStateUsing(fn (mixed $state): string => currency()->priceFormat(is_numeric($state) ? (string) $state : '0'))
                     ->color(fn (BotUserWallet $record): ?string => self::isNegative($record) ? 'danger' : null)
                     ->sortable(),
-                TextColumn::make('updated_at')->label((string) __('tbe-user-wallet::web.changed'))->since()->sortable(),
+                PanelDates::since(TextColumn::make('updated_at'))->label((string) __('tbe-user-wallet::web.changed'))->sortable(),
             ])
             ->filters([
                 Filter::make('holders')
@@ -68,17 +72,15 @@ class WalletResource extends PanelResource
                     ->default(),
             ])
             ->defaultSort('balance', 'desc')
+            ->persistFiltersInSession()
+            ->persistSearchInSession()
+            ->emptyStateHeading((string) __('tbe-user-wallet::web.empty.wallets'))
             ->recordUrl(fn (BotUserWallet $record): string => ViewWallet::getUrl(['record' => $record]));
     }
 
     public static function memberName(mixed $user): string
     {
-        $telegramUser = $user instanceof BotUser ? $user->telegramUser : null;
-        if (! $telegramUser instanceof TelegramUser) {
-            return '?';
-        }
-
-        return $telegramUser->username ? '@'.$telegramUser->username : ((string) $telegramUser->full_name ?: (string) $telegramUser->peer_id);
+        return PanelMembers::label($user);
     }
 
     private static function isNegative(BotUserWallet $wallet): bool
