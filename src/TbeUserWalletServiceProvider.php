@@ -4,10 +4,14 @@ namespace TelegramBotEssentials\UserWallet;
 
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Telegram\Bot\Keyboard\Keyboard;
+use TelegramBotEssentials\Announcements\DTOs\Alert;
+use TelegramBotEssentials\Announcements\DTOs\AlertParam;
+use TelegramBotEssentials\Announcements\DTOs\Audience;
 use TelegramBotEssentials\Announcements\DTOs\Placeholder;
 use TelegramBotEssentials\Billing\DTOs\Gateway;
 use TelegramBotEssentials\Billing\Models\Invoice;
@@ -91,6 +95,8 @@ class TbeUserWalletServiceProvider extends ServiceProvider
 
         $this->registerAnnouncementPlaceholders();
 
+        $this->registerAnnouncementAlerts();
+
         $this->registerUserManagementStat();
     }
 
@@ -146,6 +152,57 @@ class TbeUserWalletServiceProvider extends ServiceProvider
             },
             example: fn () => currency()->priceFormat('50000'),
             active: fn () => (bool) settings()->get('billing.user_wallet.status'),
+        ));
+    }
+
+    /**
+     * "You have credit to spend": an automatic alert for members whose
+     * wallet has held a balance untouched for a while. Registered only when
+     * announcements is installed, and sent only once an admin switches it on.
+     */
+    private function registerAnnouncementAlerts(): void
+    {
+        if (! class_exists(Alert::class)) {
+            return;
+        }
+
+        $active = fn () => (bool) settings()->get('billing.user_wallet.status');
+        $text = fn (string $key) => fn () => __('tbe-user-wallet::alerts.idle_credit.'.$key);
+
+        announcementAudiences()->add(new Audience(
+            key: 'wallet.idle_credit',
+            label: $text('audience'),
+            apply: fn (Builder $query) => $query->whereIn('bot_users.id', BotUserWallet::query()
+                ->where('balance', '>=', max(1, announcementAlerts()->param('wallet.idle_credit', 'min_balance')))
+                ->where('updated_at', '<=', now()->subDays(announcementAlerts()->param('wallet.idle_credit', 'idle_days')))
+                ->select('bot_user_id')),
+            active: $active,
+        ));
+
+        announcementAlerts()->register(new Alert(
+            key: 'wallet.idle_credit',
+            label: $text('label'),
+            audience: 'wallet.idle_credit',
+            text: $text('text'),
+            params: [
+                new AlertParam(
+                    key: 'min_balance',
+                    label: $text('min_balance'),
+                    default: 10000,
+                    description: $text('min_balance_description'),
+                    format: fn (int $value) => currency()->priceFormat((string) $value),
+                ),
+                new AlertParam(
+                    key: 'idle_days',
+                    label: $text('idle_days'),
+                    default: 7,
+                    description: $text('idle_days_description'),
+                ),
+            ],
+            repeatDays: 30,
+            priority: 20,
+            active: $active,
+            description: $text('description'),
         ));
     }
 
