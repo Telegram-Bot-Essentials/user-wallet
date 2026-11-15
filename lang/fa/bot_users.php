@@ -10,4 +10,7 @@ return [
             ."مجموع موجودی: :total\r\n"
             .'دارای موجودی: :holders کاربر',
     ],
+    'placeholders' => [
+        'balance' => 'موجودی کیف پول',
+    ],
 ];
