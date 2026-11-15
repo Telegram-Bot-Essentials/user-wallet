@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "963692d487e06936cf44233c18f74fd9",
+    "content-hash": "8ea21eae263dd7c7ccda27d3b1686c1f",
     "packages": [
         {
             "name": "brick/math",
@@ -12909,6 +12909,71 @@
                 "source": "https://github.com/ta-tikoma/phpunit-architecture-test/tree/0.8.7"
             },
             "time": "2026-02-17T17:25:14+00:00"
+        },
+        {
+            "name": "telegram-bot-essentials/announcements",
+            "version": "v0.0.25",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Telegram-Bot-Essentials/announcements.git",
+                "reference": "3aa061ea8a218fedcfcc548155136f6dfefe94d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Telegram-Bot-Essentials/announcements/zipball/3aa061ea8a218fedcfcc548155136f6dfefe94d2",
+                "reference": "3aa061ea8a218fedcfcc548155136f6dfefe94d2",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^12 || ^13",
+                "php": "^8.3",
+                "telegram-bot-essentials/essence": "^0.19.0-beta.9@beta"
+            },
+            "require-dev": {
+                "filament/filament": "^5.11",
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.18",
+                "orchestra/testbench": "^10.0 || ^11.0",
+                "pestphp/pest": "^3.7 || ^4.0",
+                "pestphp/pest-plugin-laravel": "^3.1 || ^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TelegramBotEssentials\\Announcements\\TbeAnnouncementsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap/canvas.php",
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "TelegramBotEssentials\\Announcements\\": "src/"
+                },
+                "classmap": [
+                    "database/factories",
+                    "database/seeders"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elyar",
+                    "email": "elyareranjbar@gmail.com"
+                }
+            ],
+            "description": "Bulk broadcast with live progress and retraction for telegram-bot-essentials/essence",
+            "support": {
+                "issues": "https://github.com/Telegram-Bot-Essentials/announcements/issues",
+                "source": "https://github.com/Telegram-Bot-Essentials/announcements/tree/v0.0.25"
+            },
+            "time": "2026-11-15T13:27:33+00:00"
         },
         {
             "name": "telegram-bot-essentials/user-management",

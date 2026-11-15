@@ -6,6 +6,10 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- Offer `{$wallet.balance}` to announcement texts when announcements is installed.
+
 ## [0.0.38] - 2026-11-11
 
 ### Added
