@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Telegram\Bot\Keyboard\Keyboard;
+use TelegramBotEssentials\Announcements\DTOs\Placeholder;
 use TelegramBotEssentials\Billing\DTOs\Gateway;
 use TelegramBotEssentials\Billing\Models\Invoice;
 use TelegramBotEssentials\Billing\Services\Gateways\Wallet;
@@ -88,6 +89,8 @@ class TbeUserWalletServiceProvider extends ServiceProvider
 
         $this->registerAdminWalletSection();
 
+        $this->registerAnnouncementPlaceholders();
+
         $this->registerUserManagementStat();
     }
 
@@ -117,6 +120,31 @@ class TbeUserWalletServiceProvider extends ServiceProvider
                     'holders' => number_format($wallets->holders ?? 0),
                 ]);
             },
+            active: fn () => (bool) settings()->get('billing.user_wallet.status'),
+        ));
+    }
+
+    /**
+     * `{$wallet.balance}` in announcement texts. Registered only when
+     * announcements is installed, which this package does not require.
+     */
+    private function registerAnnouncementPlaceholders(): void
+    {
+        if (! class_exists(Placeholder::class)) {
+            return;
+        }
+
+        announcementPlaceholders()->add(new Placeholder(
+            key: 'wallet.balance',
+            label: fn () => __('tbe-user-wallet::bot_users.placeholders.balance'),
+            // Read straight from the table: the wallet relation creates a row
+            // for every user it is asked about, and this runs for every recipient.
+            resolve: function (BotUser $user): string {
+                $balance = BotUserWallet::query()->where('bot_user_id', $user->id)->value('balance');
+
+                return currency()->priceFormat(is_numeric($balance) ? (string) $balance : '0');
+            },
+            example: fn () => currency()->priceFormat('50000'),
             active: fn () => (bool) settings()->get('billing.user_wallet.status'),
         ));
     }
