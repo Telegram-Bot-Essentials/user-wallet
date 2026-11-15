@@ -6,6 +6,10 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- Register an automatic alert for unused wallet credit, and its audience, when announcements is installed.
+
 ## [0.0.39] - 2026-11-15
 
 ### Added
