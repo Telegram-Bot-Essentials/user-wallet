@@ -10,4 +10,7 @@ return [
             ."Total balance: :total\r\n"
             .'With a balance: :holders users',
     ],
+    'placeholders' => [
+        'balance' => 'Wallet balance',
+    ],
 ];
